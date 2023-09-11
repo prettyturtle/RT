@@ -38,7 +38,7 @@ final class RTViewController: UIViewController {
     private lazy var mainView = UIView()
     
     private var introView: IntroView?
-    private var studyView : StudyView?
+    private var studyView: StudyView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -123,76 +123,4 @@ struct RTViewController_Preview: PreviewProvider{
             )
         )
     }
-}
-
-
-
-// MARK: - RTModel
-struct RTModel: Codable {
-    let rtQuizList: RtQuizList
-}
-
-// MARK: - RtQuizList
-struct RtQuizList: Codable {
-    let rtQuiz: [RtQuiz]
-}
-
-// MARK: - RtQuiz
-struct RtQuiz: Codable {
-    let quizSeq, rtIdx: Int
-    let contentEng, contentKor: String
-    let quizResource: QuizResource
-    let quizMakeup: QuizMakeup
-    let quizRepeat: QuizRepeat
-}
-
-// MARK: - QuizMakeup
-struct QuizMakeup: Codable {
-    let chunkList: String
-    let bgImg: String
-    let boxType: String
-    let boxPosX, boxPosY: Int
-}
-
-// MARK: - QuizRepeat
-struct QuizRepeat: Codable {
-    let repeatContentEng, repeatContentKor: String
-    let repeatContentMp3: String
-    let diosttRepeatScript, diosttRepeatChunk: String
-
-    enum CodingKeys: String, CodingKey {
-        case repeatContentEng, repeatContentKor, repeatContentMp3
-        case diosttRepeatScript = "DIOSTT_repeatScript"
-        case diosttRepeatChunk = "DIOSTT_repeatChunk"
-    }
-}
-
-// MARK: - QuizResource
-struct QuizResource: Codable {
-    let srcMOVPath: String
-    let srcMOVDNPath: String
-    let srcMOVBlurImg, scriptBegin, scriptEnd: String
-
-    enum CodingKeys: String, CodingKey {
-        case srcMOVPath = "srcMovPath"
-        case srcMOVDNPath = "srcMovDnPath"
-        case srcMOVBlurImg = "srcMovBlurImg"
-        case scriptBegin, scriptEnd
-    }
-}
-
-func decodeJSONInBundle<T: Codable>(fileName: String) -> T? {
-    guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
-        return nil
-    }
-    
-    guard let data = try? Data(contentsOf: url) else {
-        return nil
-    }
-    
-    let decoder = JSONDecoder()
-    
-    let decodedData = try? decoder.decode(T.self, from: data)
-    
-    return decodedData
 }

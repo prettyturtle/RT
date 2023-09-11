@@ -40,17 +40,6 @@ final class ViewController: UIViewController {
         
         present(nc, animated: true)
     }
-    
-}
-
-struct UIViewControllerPreview: UIViewControllerRepresentable {
-    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
-    
-    let vc: UIViewController
-    
-    func makeUIViewController(context: Context) -> some UIViewController {
-        return vc
-    }
 }
 
 struct ViewController_Preview: PreviewProvider{
