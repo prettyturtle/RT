@@ -1,5 +1,5 @@
 //
-//  StudyView.swift
+//  StudyThumbnailView.swift
 //  RealTraining
 //
 //  Created by yc on 2023/09/09.
@@ -9,14 +9,14 @@ import UIKit
 import SnapKit
 import Then
 
-protocol StudyViewDelegate: AnyObject {
-    func studyView(_ sv: StudyView, didTapStartButton: UIButton)
+protocol StudyThumbnailViewDelegate: AnyObject {
+    func studyView(_ sv: StudyThumbnailView, didTapStartButton: UIButton)
 }
 
-final class StudyView: UIView {
+final class StudyThumbnailView: UIView {
     let studyInfo: RtQuiz
     
-    weak var delegate: StudyViewDelegate?
+    weak var delegate: StudyThumbnailViewDelegate?
     
     init(studyInfo: RtQuiz) {
         self.studyInfo = studyInfo
