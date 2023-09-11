@@ -17,8 +17,8 @@ final class IntroView: UIView {
     
     weak var delegate: IntroViewDelegate?
     
-    private lazy var topView = UIView()
-    private lazy var bottomView = UIView()
+    private lazy var topView = UIView().then { $0.isUserInteractionEnabled = false }
+    private lazy var bottomView = UIView().then { $0.isUserInteractionEnabled = false }
     
     private lazy var enTitleLabel = UILabel().then {
         $0.textColor = .lightGray
@@ -140,7 +140,7 @@ final class IntroView: UIView {
         [
             startButton
         ].forEach {
-            bottomView.addSubview($0)
+            addSubview($0)
         }
         
         startButton.snp.makeConstraints {
