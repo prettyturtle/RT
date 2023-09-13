@@ -32,6 +32,8 @@ final class StudySelectView: UIView {
     
     lazy var choiceTexts = Array(repeating: "", count: questionTexts.count)
     
+    var questionBoxes = [UIView]()
+    
     private lazy var descriptionLabel = UILabel().then {
         $0.text = "한글 문장을 영어로 만들어보세요!"
         $0.font = .systemFont(ofSize: 20, weight: .heavy)
@@ -47,6 +49,12 @@ final class StudySelectView: UIView {
         $0.alignment = .center
         $0.spacing = 8
         $0.axis = .vertical
+    }
+    
+    private lazy var questionBoxQuestionMarkLabel = UILabel().then {
+        $0.text = "?"
+        $0.textColor = UIColor(red: 255 / 255, green: 144 / 255, blue: 0, alpha: 1)
+        $0.font = .systemFont(ofSize: 16, weight: .bold)
     }
     
     private lazy var questionMeanLabel = UILabel().then {
@@ -91,12 +99,45 @@ final class StudySelectView: UIView {
                 subview.removeFromSuperview()
             }
             
+            // TODO: - 선지 선택 처리 : 빈칸 채우기
+            let currentQuestionBox = self.questionBoxes[self.currentQuestionStep]
+            
+            currentQuestionBox.backgroundColor = .init(
+                red: 215 / 255,
+                green: 215 / 255,
+                blue: 215 / 255,
+                alpha: 1
+            )
+            
+            let choiceTextLabel = UILabel().then {
+                $0.text = choiceText
+                $0.textColor = .black
+                $0.font = .systemFont(ofSize: 16, weight: .bold)
+                $0.textAlignment = .center
+            }
+            
+            currentQuestionBox.addSubview(choiceTextLabel)
+            
+            choiceTextLabel.snp.makeConstraints {
+                $0.leading.trailing.equalToSuperview()
+                $0.centerY.equalToSuperview()
+            }
+            
+            choiceTextLabel.transform = CGAffineTransform(scaleX: 0, y: 0)
+            
+            UIView.animate(withDuration: 0.1) {
+                choiceTextLabel.transform = .identity
+            }
+            
+            setupQuestionBoxBorderColor(isLight: false)
+            
             if self.currentQuestionStep < self.questionTexts.count - 1 {
-                // TODO: - 선지 선택 처리 : 빈칸 채우기
                 
                 self.currentQuestionStep += 1
                 
                 self.setupChoiceButtons()
+                
+                self.setupQuestionBoxBorderColor(isLight: true)
             } else {
                 // TODO: - 최종 채점
                 print("🎉")
@@ -106,7 +147,24 @@ final class StudySelectView: UIView {
     
     private func setupView() {
         setupQuestionBoxes()
+        setupQuestionBoxBorderColor(isLight: true)
         setupChoiceButtons()
+    }
+    
+    private func setupQuestionBoxBorderColor(isLight: Bool) {
+        let currentQuestionBox = questionBoxes[currentQuestionStep]
+        
+        currentQuestionBox.layer.borderColor = isLight ? UIColor(red: 255 / 255, green: 144 / 255, blue: 0, alpha: 1).cgColor : UIColor(red: 121 / 255, green: 121 / 255, blue: 121 / 255, alpha: 1).cgColor
+        
+        if isLight {
+            currentQuestionBox.addSubview(questionBoxQuestionMarkLabel)
+            
+            questionBoxQuestionMarkLabel.snp.makeConstraints {
+                $0.center.equalToSuperview()
+            }
+        } else {
+            questionBoxQuestionMarkLabel.removeFromSuperview()
+        }
     }
     
     private func setupQuestionBoxes() {
@@ -118,11 +176,13 @@ final class StudySelectView: UIView {
         
         for boxText in boxTexts {
             let boxView = UIView().then {
-                $0.layer.borderColor = UIColor.darkGray.cgColor
-                $0.layer.borderWidth = 1
+                $0.layer.borderColor = UIColor(red: 121 / 255, green: 121 / 255, blue: 121 / 255, alpha: 1).cgColor
+                $0.layer.borderWidth = 2
                 $0.layer.cornerRadius = 2
                 $0.backgroundColor = .white
             }
+            
+            questionBoxes.append(boxView)
             
             var boxWidth = (boxText as NSString).size(withAttributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16, weight: .bold)]).width + 32
             
@@ -231,7 +291,6 @@ final class StudySelectView: UIView {
         }
         
         choiceButtonStackView.snp.makeConstraints {
-            //$0.leading.trailing.equalToSuperview().inset(16)
             $0.centerX.equalToSuperview()
             $0.top.equalTo(questionBackgroundView.snp.bottom).offset(40)
         }
