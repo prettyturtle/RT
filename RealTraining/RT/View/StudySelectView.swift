@@ -13,6 +13,22 @@ final class StudySelectView: UIView {
     
     let studyInfo: RtQuiz
     
+    var questionTexts: [String] {
+        let texts = try! JSONSerialization.jsonObject(with: Data(studyInfo.quizRepeat.diosttRepeatChunk.utf8)) as! [String]
+        
+        return texts
+    }
+    
+    var questionDic: [String: [String]] {
+        
+        let chunkList = studyInfo.quizMakeup.chunkList
+        let jsonChunkList = try! JSONSerialization.jsonObject(with: Data(chunkList.utf8)) as! [String: [String]]
+        
+        return jsonChunkList
+    }
+    
+    var currentQuestionStep = 0
+    
     private lazy var descriptionLabel = UILabel().then {
         $0.text = "한글 문장을 영어로 만들어보세요!"
         $0.font = .systemFont(ofSize: 20, weight: .heavy)
@@ -38,7 +54,7 @@ final class StudySelectView: UIView {
     
     private lazy var choiceButtonStackView = UIStackView().then {
         $0.axis = .vertical
-        $0.spacing = 8
+        $0.spacing = 16
     }
     
     init(studyInfo: RtQuiz, frame: CGRect) {
@@ -59,7 +75,7 @@ final class StudySelectView: UIView {
     }
     
     private func setupQuestionBoxes() {
-        let boxTexts = studyInfo.contentEng.split(separator: "|").map { String($0) }
+        let boxTexts = questionTexts
         
         var currentWidth: CGFloat = 0
         
@@ -126,7 +142,17 @@ final class StudySelectView: UIView {
     }
     
     private func setupChoiceButtons() {
-        
+        let choiceTexts = questionDic[questionTexts[currentQuestionStep]]!.shuffled()
+        for i in 0..<choiceTexts.count {
+            let choiceButton = ChoiceButton(text: choiceTexts[i], index: i)
+            
+            choiceButton.snp.makeConstraints {
+                $0.width.equalTo(frame.width - 32)
+                $0.height.equalTo(64)
+            }
+            
+            choiceButtonStackView.addArrangedSubview(choiceButton)
+        }
     }
     
     private func setupLayout() {
@@ -163,7 +189,8 @@ final class StudySelectView: UIView {
         }
         
         choiceButtonStackView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(16)
+            //$0.leading.trailing.equalToSuperview().inset(16)
+            $0.centerX.equalToSuperview()
             $0.top.equalTo(questionBackgroundView.snp.bottom).offset(40)
         }
     }
