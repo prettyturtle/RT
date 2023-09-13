@@ -5,8 +5,9 @@
 //  Created by yc on 2023/09/12.
 //
 
-import Foundation
+import UIKit
 
+// MARK: - JSON Decoder In Bundle
 func decodeJSONInBundle<T: Codable>(fileName: String) -> T? {
     guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
         return nil
@@ -22,3 +23,6 @@ func decodeJSONInBundle<T: Codable>(fileName: String) -> T? {
     
     return decodedData
 }
+
+// MARK: - Haptic
+let haptic = UISelectionFeedbackGenerator()

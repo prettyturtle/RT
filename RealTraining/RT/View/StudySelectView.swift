@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
+
 final class StudySelectView: UIView {
     
     let studyInfo: RtQuiz
@@ -28,6 +29,8 @@ final class StudySelectView: UIView {
     }
     
     var currentQuestionStep = 0
+    
+    lazy var choiceTexts = Array(repeating: "", count: questionTexts.count)
     
     private lazy var descriptionLabel = UILabel().then {
         $0.text = "한글 문장을 영어로 만들어보세요!"
@@ -67,6 +70,38 @@ final class StudySelectView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func didTapChoiceButton(_ sender: ChoiceButton) {
+        haptic.selectionChanged()
+        
+        let choiceText = sender.text
+        
+        choiceTexts[currentQuestionStep] = choiceText
+        
+        UIView.animate(withDuration: 0.5) {
+            self.choiceButtonStackView.arrangedSubviews.forEach { subView in
+                subView.transform = CGAffineTransform(translationX: 0, y: 100)
+                subView.alpha = 0
+            }
+        } completion: { [weak self] _ in
+            guard let self = self else { return }
+            
+            self.choiceButtonStackView.arrangedSubviews.forEach { subview in
+                subview.removeFromSuperview()
+            }
+            
+            if self.currentQuestionStep < self.questionTexts.count - 1 {
+                // TODO: - 선지 선택 처리 : 빈칸 채우기
+                
+                self.currentQuestionStep += 1
+                
+                self.setupChoiceButtons()
+            } else {
+                // TODO: - 최종 채점
+                print("🎉")
+            }
+        }
     }
     
     private func setupView() {
@@ -143,8 +178,15 @@ final class StudySelectView: UIView {
     
     private func setupChoiceButtons() {
         let choiceTexts = questionDic[questionTexts[currentQuestionStep]]!.shuffled()
+        
         for i in 0..<choiceTexts.count {
             let choiceButton = ChoiceButton(text: choiceTexts[i], index: i)
+            
+            choiceButton.addTarget(
+                self,
+                action: #selector(didTapChoiceButton),
+                for: .touchUpInside
+            )
             
             choiceButton.snp.makeConstraints {
                 $0.width.equalTo(frame.width - 32)
