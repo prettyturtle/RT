@@ -109,7 +109,12 @@ extension RTViewController: IntroViewDelegate {
 
 extension RTViewController: StudyThumbnailViewDelegate {
     func studyView(_ sv: StudyThumbnailView, didTapStartButton: UIButton) {
-        studySelectView = StudySelectView(studyInfo: studyInfos!.rtQuizList.rtQuiz[currentStudyIdx], frame: view.safeAreaLayoutGuide.layoutFrame)
+        studySelectView = StudySelectView(
+            studyInfo: studyInfos!.rtQuizList.rtQuiz[currentStudyIdx],
+            frame: view.safeAreaLayoutGuide.layoutFrame
+        )
+        
+        studySelectView?.delegate = self
         
         mainView.addSubview(studySelectView!)
         
@@ -121,6 +126,36 @@ extension RTViewController: StudyThumbnailViewDelegate {
         
         UIView.animate(withDuration: 0.3) {
             self.studySelectView?.transform = .identity
+        } completion: { _ in
+            sv.removeFromSuperview()
+        }
+    }
+}
+
+extension RTViewController: StudySelectViewDelegate {
+    func studySelectView(_ sv: StudySelectView, didTapNextButton: UIButton) {
+        currentStudyIdx += 1
+        
+        if currentStudyIdx == studyInfos!.rtQuizList.rtQuiz.count - 1 {
+            dismiss(animated: true)
+            return
+        }
+        
+        studyThumbnailView = StudyThumbnailView(studyInfo: studyInfos!.rtQuizList.rtQuiz[currentStudyIdx])
+        navigationItem.title = "Question \(currentStudyIdx + 1) of \(studyInfos!.rtQuizList.rtQuiz.count)"
+        
+        studyThumbnailView?.delegate = self
+        
+        mainView.addSubview(studyThumbnailView!)
+        
+        studyThumbnailView!.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        studyThumbnailView?.transform = CGAffineTransform(scaleX: 0, y: 0)
+        
+        UIView.animate(withDuration: 0.3) {
+            self.studyThumbnailView?.transform = .identity
         } completion: { _ in
             sv.removeFromSuperview()
         }

@@ -9,8 +9,13 @@ import UIKit
 import SnapKit
 import Then
 
+protocol StudySelectViewDelegate: AnyObject {
+    func studySelectView(_ sv: StudySelectView, didTapNextButton: UIButton)
+}
 
 final class StudySelectView: UIView {
+    
+    weak var delegate: StudySelectViewDelegate?
     
     let studyInfo: RtQuiz
     
@@ -66,6 +71,37 @@ final class StudySelectView: UIView {
     private lazy var choiceButtonStackView = UIStackView().then {
         $0.axis = .vertical
         $0.spacing = 16
+    }
+    
+    private lazy var nextButton = UIButton().then {
+        var titleConfig = AttributeContainer()
+        
+        titleConfig.foregroundColor = .white
+        titleConfig.font = .systemFont(ofSize: 20, weight: .heavy)
+        
+        var buttonConfig = UIButton.Configuration.filled()
+        
+        buttonConfig.attributedTitle = AttributedString(
+            "트레이닝 시작",
+            attributes: titleConfig
+        )
+        buttonConfig.image = UIImage(systemName: "arrow.forward.circle")
+        buttonConfig.imagePlacement = .trailing
+        buttonConfig.imagePadding = 8
+        buttonConfig.baseBackgroundColor = .init(
+            red: 239 / 255,
+            green: 64 / 255,
+            blue: 64 / 255,
+            alpha: 1
+        )
+        
+        $0.configuration = buttonConfig
+        
+        $0.addTarget(
+            self,
+            action: #selector(didTapNextButton),
+            for: .touchUpInside
+        )
     }
     
     init(studyInfo: RtQuiz, frame: CGRect) {
@@ -140,9 +176,53 @@ final class StudySelectView: UIView {
                 self.setupQuestionBoxBorderColor(isLight: true)
             } else {
                 // TODO: - 최종 채점
-                print("🎉")
+                
+                giveOX(0)
             }
         }
+    }
+    
+    private func giveOX(_ step: Int) {
+        if step == questionTexts.count {
+            setupNextButton()
+            return
+        }
+        
+        let oxImageView = UIImageView()
+        
+        if questionTexts[step] == choiceTexts[step] {
+            oxImageView.image = UIImage(named: "icon_answer_o")
+        } else {
+            oxImageView.image = UIImage(named: "icon_answer_x")
+        }
+        
+        addSubview(oxImageView)
+        
+        oxImageView.snp.makeConstraints {
+            $0.center.equalTo(questionBoxes[step])
+            $0.size.equalTo(questionBoxes[step].frame.height * 1.3)
+        }
+        
+        oxImageView.transform = CGAffineTransform(scaleX: 0, y: 0)
+        
+        UIView.animate(withDuration: 0.4) {
+            oxImageView.transform = .identity
+        } completion: { [weak self] _ in
+            self?.giveOX(step + 1)
+        }
+    }
+    
+    private func setupNextButton() {
+        addSubview(nextButton)
+        
+        nextButton.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview().inset(16)
+            $0.height.equalTo(50)
+        }
+    }
+    
+    @objc func didTapNextButton(_ sender: UIButton) {
+        delegate?.studySelectView(self, didTapNextButton: sender)
     }
     
     private func setupView() {

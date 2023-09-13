@@ -71,7 +71,7 @@ final class StudyThumbnailView: UIView {
         var buttonConfig = UIButton.Configuration.filled()
         
         buttonConfig.attributedTitle = AttributedString(
-            "시작하기",
+            "계속하기",
             attributes: titleConfig
         )
         buttonConfig.image = UIImage(systemName: "arrow.forward.circle")
