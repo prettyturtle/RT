@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 // MARK: - JSON Decoder In Bundle
 func decodeJSONInBundle<T: Codable>(fileName: String) -> T? {
@@ -26,3 +27,16 @@ func decodeJSONInBundle<T: Codable>(fileName: String) -> T? {
 
 // MARK: - Haptic
 let haptic = UISelectionFeedbackGenerator()
+
+// MARK: - FX Player
+
+var fxPlayer: AVAudioPlayer?
+
+func playFX(_ fileName: String) {
+    guard let url = Bundle.main.url(forResource: fileName, withExtension: "mp3") else {
+        return
+    }
+    
+    fxPlayer = try? AVAudioPlayer(contentsOf: url)
+    fxPlayer?.play()
+}

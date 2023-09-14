@@ -40,6 +40,7 @@ final class RTViewController: UIViewController {
     private var introView: IntroView?
     private var studyThumbnailView: StudyThumbnailView?
     private var studySelectView: StudySelectView?
+    private var studyVideoRecordView: StudyVideoRecordView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -134,9 +135,34 @@ extension RTViewController: StudyThumbnailViewDelegate {
 
 extension RTViewController: StudySelectViewDelegate {
     func studySelectView(_ sv: StudySelectView, didTapNextButton: UIButton) {
+        studyVideoRecordView = StudyVideoRecordView(
+            studyInfo: studyInfos!.rtQuizList.rtQuiz[currentStudyIdx],
+            frame: view.safeAreaLayoutGuide.layoutFrame
+        )
+        
+        studyVideoRecordView?.delegate = self
+        
+        mainView.addSubview(studyVideoRecordView!)
+        
+        studyVideoRecordView!.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        studyVideoRecordView?.transform = CGAffineTransform(translationX: 0, y: -view.frame.height)
+        
+        UIView.animate(withDuration: 0.3) {
+            self.studyVideoRecordView?.transform = .identity
+        } completion: { _ in
+            sv.removeFromSuperview()
+        }
+    }
+}
+
+extension RTViewController: StudyVideoRecordViewDelegate {
+    func studyVideoRecordView(_ srv: StudyVideoRecordView, didFinishRecord: UIButton) {
         currentStudyIdx += 1
         
-        if currentStudyIdx == studyInfos!.rtQuizList.rtQuiz.count - 1 {
+        if currentStudyIdx == studyInfos!.rtQuizList.rtQuiz.count {
             dismiss(animated: true)
             return
         }
@@ -157,7 +183,7 @@ extension RTViewController: StudySelectViewDelegate {
         UIView.animate(withDuration: 0.3) {
             self.studyThumbnailView?.transform = .identity
         } completion: { _ in
-            sv.removeFromSuperview()
+            srv.removeFromSuperview()
         }
     }
 }

@@ -177,7 +177,9 @@ final class StudySelectView: UIView {
             } else {
                 // TODO: - 최종 채점
                 
-                giveOX(0)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    self.giveOX(0)
+                }
             }
         }
     }
@@ -188,9 +190,11 @@ final class StudySelectView: UIView {
             return
         }
         
+        let isCorrect = questionTexts[step] == choiceTexts[step]
+        
         let oxImageView = UIImageView()
         
-        if questionTexts[step] == choiceTexts[step] {
+        if isCorrect {
             oxImageView.image = UIImage(named: "icon_answer_o")
         } else {
             oxImageView.image = UIImage(named: "icon_answer_x")
@@ -204,6 +208,12 @@ final class StudySelectView: UIView {
         }
         
         oxImageView.transform = CGAffineTransform(scaleX: 0, y: 0)
+        
+        if isCorrect {
+            playFX("sfx_correct")
+        } else {
+            playFX("sfx_wrong")
+        }
         
         UIView.animate(withDuration: 0.4) {
             oxImageView.transform = .identity
@@ -235,6 +245,10 @@ final class StudySelectView: UIView {
         let currentQuestionBox = questionBoxes[currentQuestionStep]
         
         currentQuestionBox.layer.borderColor = isLight ? UIColor(red: 255 / 255, green: 144 / 255, blue: 0, alpha: 1).cgColor : UIColor(red: 121 / 255, green: 121 / 255, blue: 121 / 255, alpha: 1).cgColor
+        
+        currentQuestionBox.layer.shadowColor = UIColor(red: 255 / 255, green: 239 / 255, blue: 117 / 255, alpha: 1).cgColor
+        currentQuestionBox.layer.shadowRadius = 14
+        currentQuestionBox.layer.shadowOpacity = isLight ? 1 : 0
         
         if isLight {
             currentQuestionBox.addSubview(questionBoxQuestionMarkLabel)
