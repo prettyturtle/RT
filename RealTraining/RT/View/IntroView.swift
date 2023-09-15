@@ -10,7 +10,7 @@ import SnapKit
 import Then
 
 protocol IntroViewDelegate: AnyObject {
-    func introView(_ iv: IntroView, didTapStartButton: UIButton)
+    func introView(_ iv: IntroView, didTapStartButton startButton: UIButton)
 }
 
 final class IntroView: UIView {
@@ -86,6 +86,7 @@ final class IntroView: UIView {
     }
     
     @objc func didTapStartButton(_ sender: UIButton) {
+        sender.isEnabled = false
         delegate?.introView(self, didTapStartButton: sender)
     }
     

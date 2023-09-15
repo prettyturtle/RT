@@ -10,7 +10,7 @@ import SnapKit
 import Then
 
 protocol StudyThumbnailViewDelegate: AnyObject {
-    func studyView(_ sv: StudyThumbnailView, didTapStartButton: UIButton)
+    func studyView(_ sv: StudyThumbnailView, didTapStartButton startButton: UIButton)
 }
 
 final class StudyThumbnailView: UIView {
@@ -94,6 +94,7 @@ final class StudyThumbnailView: UIView {
     }
     
     @objc func didTapStartButton(_ sender: UIButton) {
+        sender.isEnabled = false
         delegate?.studyView(self, didTapStartButton: sender)
     }
     

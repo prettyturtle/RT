@@ -86,7 +86,7 @@ final class RTViewController: UIViewController {
 }
 
 extension RTViewController: IntroViewDelegate {
-    func introView(_ iv: IntroView, didTapStartButton: UIButton) {
+    func introView(_ iv: IntroView, didTapStartButton startButton: UIButton) {
         studyThumbnailView = StudyThumbnailView(studyInfo: studyInfos!.rtQuizList.rtQuiz[currentStudyIdx])
         navigationItem.title = "Question \(currentStudyIdx + 1) of \(studyInfos!.rtQuizList.rtQuiz.count)"
         
@@ -103,13 +103,14 @@ extension RTViewController: IntroViewDelegate {
         UIView.animate(withDuration: 0.3) {
             self.studyThumbnailView?.transform = .identity
         } completion: { _ in
+            startButton.isEnabled = true
             iv.removeFromSuperview()
         }
     }
 }
 
 extension RTViewController: StudyThumbnailViewDelegate {
-    func studyView(_ sv: StudyThumbnailView, didTapStartButton: UIButton) {
+    func studyView(_ sv: StudyThumbnailView, didTapStartButton startButton: UIButton) {
         studySelectView = StudySelectView(
             studyInfo: studyInfos!.rtQuizList.rtQuiz[currentStudyIdx],
             frame: view.safeAreaLayoutGuide.layoutFrame
@@ -128,13 +129,14 @@ extension RTViewController: StudyThumbnailViewDelegate {
         UIView.animate(withDuration: 0.3) {
             self.studySelectView?.transform = .identity
         } completion: { _ in
+            startButton.isEnabled = true
             sv.removeFromSuperview()
         }
     }
 }
 
 extension RTViewController: StudySelectViewDelegate {
-    func studySelectView(_ sv: StudySelectView, didTapNextButton: UIButton) {
+    func studySelectView(_ sv: StudySelectView, didTapNextButton nextButton: UIButton) {
         studyVideoRecordView = StudyVideoRecordView(
             studyInfo: studyInfos!.rtQuizList.rtQuiz[currentStudyIdx],
             frame: view.safeAreaLayoutGuide.layoutFrame
@@ -153,6 +155,7 @@ extension RTViewController: StudySelectViewDelegate {
         UIView.animate(withDuration: 0.3) {
             self.studyVideoRecordView?.transform = .identity
         } completion: { _ in
+            nextButton.isEnabled = true
             sv.removeFromSuperview()
         }
     }

@@ -10,7 +10,7 @@ import SnapKit
 import Then
 
 protocol StudySelectViewDelegate: AnyObject {
-    func studySelectView(_ sv: StudySelectView, didTapNextButton: UIButton)
+    func studySelectView(_ sv: StudySelectView, didTapNextButton nextButton: UIButton)
 }
 
 final class StudySelectView: UIView {
@@ -232,6 +232,7 @@ final class StudySelectView: UIView {
     }
     
     @objc func didTapNextButton(_ sender: UIButton) {
+        sender.isEnabled = false
         delegate?.studySelectView(self, didTapNextButton: sender)
     }
     
