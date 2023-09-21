@@ -102,9 +102,10 @@ extension RTViewController: IntroViewDelegate {
         
         UIView.animate(withDuration: 0.3) {
             self.studyThumbnailView?.transform = .identity
-        } completion: { _ in
+        } completion: { [weak self] _ in
             startButton.isEnabled = true
             iv.removeFromSuperview()
+            self?.introView = nil
         }
     }
 }
@@ -128,9 +129,10 @@ extension RTViewController: StudyThumbnailViewDelegate {
         
         UIView.animate(withDuration: 0.3) {
             self.studySelectView?.transform = .identity
-        } completion: { _ in
+        } completion: { [weak self] _ in
             startButton.isEnabled = true
             sv.removeFromSuperview()
+            self?.studyThumbnailView = nil
         }
     }
 }
@@ -154,9 +156,10 @@ extension RTViewController: StudySelectViewDelegate {
         
         UIView.animate(withDuration: 0.3) {
             self.studyVideoRecordView?.transform = .identity
-        } completion: { _ in
+        } completion: { [weak self] _ in
             nextButton.isEnabled = true
             sv.removeFromSuperview()
+            self?.studySelectView = nil
         }
     }
 }
@@ -185,8 +188,9 @@ extension RTViewController: StudyVideoRecordViewDelegate {
         
         UIView.animate(withDuration: 0.3) {
             self.studyThumbnailView?.transform = .identity
-        } completion: { _ in
+        } completion: { [weak self] _ in
             srv.removeFromSuperview()
+            self?.studyVideoRecordView = nil
         }
     }
 }
