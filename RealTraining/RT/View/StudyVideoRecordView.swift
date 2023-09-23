@@ -21,9 +21,7 @@ final class StudyVideoRecordView: UIView {
     private lazy var midView = UIView()
     private lazy var bottomView = UIView()
     
-    private lazy var videoPlayerView = UIView().then {
-        $0.backgroundColor = .gray
-    }
+    private var videoPlayerView: VideoPlayerView
     
     private lazy var descriptionLabel = UILabel().then {
         $0.text = "음성을 듣고 따라 말해보세요!"
@@ -53,15 +51,24 @@ final class StudyVideoRecordView: UIView {
         )
     }
     
-    init(studyInfo: RtQuiz, frame: CGRect) {
+    init(studyInfo: RtQuiz, videoPlayerView: VideoPlayerView, frame: CGRect) {
         self.studyInfo = studyInfo
+        self.videoPlayerView = videoPlayerView
         super.init(frame: frame)
         backgroundColor = .white
         setupLayout()
+        
+        videoPlayerView.play()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSublayers(of layer: CALayer) {
+        super.layoutSublayers(of: layer)
+        
+        videoPlayerView.setupPlayerLayer()
     }
     
     @objc func didFinishRecord(_ sender: UIButton) {
@@ -83,7 +90,7 @@ final class StudyVideoRecordView: UIView {
         
         videoPlayerView.snp.makeConstraints {
             $0.leading.top.trailing.equalToSuperview()
-            $0.height.equalTo(frame.height / 3)
+            $0.height.equalTo(videoPlayerView.snp.width).multipliedBy(9.0 / 16.0)
         }
         
         midView.snp.makeConstraints {

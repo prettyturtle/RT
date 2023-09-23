@@ -42,6 +42,8 @@ final class RTViewController: UIViewController {
     private var studySelectView: StudySelectView?
     private var studyVideoRecordView: StudyVideoRecordView?
     
+    private var videoPlayerView: VideoPlayerView?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -112,6 +114,12 @@ extension RTViewController: IntroViewDelegate {
 
 extension RTViewController: StudyThumbnailViewDelegate {
     func studyView(_ sv: StudyThumbnailView, didTapStartButton startButton: UIButton) {
+        videoPlayerView = VideoPlayerView(
+            videoURLString: studyInfos!.rtQuizList.rtQuiz[currentStudyIdx].quizResource.movPath
+        )
+        
+        videoPlayerView?.setupPlayer()
+        
         studySelectView = StudySelectView(
             studyInfo: studyInfos!.rtQuizList.rtQuiz[currentStudyIdx],
             frame: view.safeAreaLayoutGuide.layoutFrame
@@ -139,8 +147,11 @@ extension RTViewController: StudyThumbnailViewDelegate {
 
 extension RTViewController: StudySelectViewDelegate {
     func studySelectView(_ sv: StudySelectView, didTapNextButton nextButton: UIButton) {
+        guard let videoPlayerView = videoPlayerView else { return }
+        
         studyVideoRecordView = StudyVideoRecordView(
             studyInfo: studyInfos!.rtQuizList.rtQuiz[currentStudyIdx],
+            videoPlayerView: videoPlayerView,
             frame: view.safeAreaLayoutGuide.layoutFrame
         )
         
@@ -191,6 +202,7 @@ extension RTViewController: StudyVideoRecordViewDelegate {
         } completion: { [weak self] _ in
             srv.removeFromSuperview()
             self?.studyVideoRecordView = nil
+            self?.videoPlayerView = nil
         }
     }
 }

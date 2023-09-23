@@ -59,4 +59,16 @@ struct QuizResource: Codable {
         case srcMOVBlurImg = "srcMovBlurImg"
         case scriptBegin, scriptEnd
     }
+    
+    var movPath: String {
+        return srcMOVDNPath
+            .replacingOccurrences(
+                of: "maxData",
+                with: "maxData_HD"
+            )
+            .replacingOccurrences(
+                of: "/_mov",
+                with: ""
+            )
+    }
 }
