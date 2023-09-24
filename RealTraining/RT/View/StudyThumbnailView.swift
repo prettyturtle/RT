@@ -18,24 +18,9 @@ final class StudyThumbnailView: UIView {
     
     weak var delegate: StudyThumbnailViewDelegate?
     
-    init(studyInfo: RtQuiz) {
-        self.studyInfo = studyInfo
-        
-        super.init(frame: .zero)
-        backgroundColor = .white
-        setupLayout()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     private lazy var thumbnailView = UIImageView().then {
         $0.backgroundColor = .secondarySystemBackground
-        let urlString = studyInfo.quizMakeup.bgImg
-        let url = URL(string: urlString)!
-        let data = try! Data(contentsOf: url)
-        $0.image = UIImage(data: data)
+        $0.contentMode = .scaleAspectFit
     }
     
     private lazy var questionLabel = UILabel().then {
@@ -93,9 +78,33 @@ final class StudyThumbnailView: UIView {
         )
     }
     
+    init(studyInfo: RtQuiz) {
+        self.studyInfo = studyInfo
+        
+        super.init(frame: .zero)
+        backgroundColor = .white
+        setupLayout()
+        
+        setThumbnailImage()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     @objc func didTapStartButton(_ sender: UIButton) {
         sender.isEnabled = false
         delegate?.studyView(self, didTapStartButton: sender)
+    }
+    
+    private func setThumbnailImage() {
+        let urlString = studyInfo.quizMakeup.bgImg
+        
+        ImageFetcher.fetch(urlString) { image in
+            DispatchQueue.main.async {
+                self.thumbnailView.image = image
+            }
+        }
     }
     
     private func setupLayout() {
@@ -111,7 +120,7 @@ final class StudyThumbnailView: UIView {
         
         thumbnailView.snp.makeConstraints {
             $0.leading.top.trailing.equalToSuperview()
-            $0.height.equalToSuperview().dividedBy(3)
+            $0.height.equalTo(thumbnailView.snp.width).multipliedBy(9.0 / 16.0)
         }
         
         questionLabel.snp.makeConstraints {
