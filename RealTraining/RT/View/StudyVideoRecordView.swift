@@ -18,10 +18,36 @@ final class StudyVideoRecordView: UIView {
     
     let studyInfo: RtQuiz
     
+    private var isPlayingVideo = true
+    private var isShowVideoPlayerControlView = false
+    
     private lazy var midView = UIView()
     private lazy var bottomView = UIView()
     
     private var videoPlayerView: VideoPlayerView
+    
+    private lazy var videoPlayerControlView = UIView().then {
+        $0.backgroundColor = .clear
+        
+        let tapGesture = UITapGestureRecognizer(
+            target: self,
+            action: #selector(didTapVideoPlayerControlView)
+        )
+        $0.isUserInteractionEnabled = true
+        $0.addGestureRecognizer(tapGesture)
+    }
+    
+    private lazy var videoPlayerPlayPauseButton = UIButton().then {
+        $0.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+        $0.imageView?.contentMode = .scaleAspectFit
+        $0.tintColor = .white
+        $0.addTarget(
+            self,
+            action: #selector(didTapVideoPlayerPlayPauseButton),
+            for: .touchUpInside
+        )
+        $0.isHidden = true
+    }
     
     private lazy var descriptionLabel = UILabel().then {
         $0.text = "음성을 듣고 따라 말해보세요!"
@@ -71,6 +97,28 @@ final class StudyVideoRecordView: UIView {
         videoPlayerView.setupPlayerLayer()
     }
     
+    @objc func didTapVideoPlayerControlView() {
+        let backgroundColor: UIColor = isShowVideoPlayerControlView ? .clear : .black.withAlphaComponent(0.5)
+        
+        videoPlayerControlView.backgroundColor = backgroundColor
+        videoPlayerPlayPauseButton.isHidden = isShowVideoPlayerControlView
+        
+        isShowVideoPlayerControlView.toggle()
+    }
+    
+    @objc func didTapVideoPlayerPlayPauseButton(_ sender: UIButton) {
+        let imageName = isPlayingVideo ? "play.fill" : "pause.fill"
+        sender.setImage(UIImage(systemName: imageName), for: .normal)
+        
+        if isPlayingVideo {
+            videoPlayerView.pause()
+        } else {
+            videoPlayerView.play()
+        }
+        
+        isPlayingVideo.toggle()
+    }
+    
     @objc func didFinishRecord(_ sender: UIButton) {
         delegate?.studyVideoRecordView(self, didFinishRecord: sender)
     }
@@ -80,6 +128,7 @@ final class StudyVideoRecordView: UIView {
             midView,
             bottomView,
             videoPlayerView,
+            videoPlayerControlView,
             descriptionLabel,
             questionBackgroundView,
             questionMeanLabel,
@@ -91,6 +140,10 @@ final class StudyVideoRecordView: UIView {
         videoPlayerView.snp.makeConstraints {
             $0.leading.top.trailing.equalToSuperview()
             $0.height.equalTo(videoPlayerView.snp.width).multipliedBy(9.0 / 16.0)
+        }
+        
+        videoPlayerControlView.snp.makeConstraints {
+            $0.edges.equalTo(videoPlayerView.snp.edges)
         }
         
         midView.snp.makeConstraints {
@@ -123,6 +176,17 @@ final class StudyVideoRecordView: UIView {
         micButton.snp.makeConstraints {
             $0.size.equalTo(40)
             $0.center.equalTo(bottomView)
+        }
+        
+        videoPlayerControlView.addSubview(videoPlayerPlayPauseButton)
+        
+        videoPlayerPlayPauseButton.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.size.equalToSuperview().dividedBy(4.0)
+        }
+        
+        videoPlayerPlayPauseButton.imageView?.snp.makeConstraints {
+            $0.size.equalToSuperview()
         }
     }
 }
