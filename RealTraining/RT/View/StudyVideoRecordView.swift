@@ -84,6 +84,7 @@ final class StudyVideoRecordView: UIView {
         backgroundColor = .white
         setupLayout()
         
+        videoPlayerView.delegate = self
         videoPlayerView.play()
     }
     
@@ -188,5 +189,15 @@ final class StudyVideoRecordView: UIView {
         videoPlayerPlayPauseButton.imageView?.snp.makeConstraints {
             $0.size.equalToSuperview()
         }
+    }
+}
+
+extension StudyVideoRecordView: VideoPlayerViewDelegate {
+    func didFinishPlaying() {
+        
+        let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+        visualEffectView.alpha = 0.8
+        visualEffectView.frame = videoPlayerControlView.frame
+        videoPlayerControlView.addSubview(visualEffectView)
     }
 }

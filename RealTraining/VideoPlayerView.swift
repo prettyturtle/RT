@@ -8,7 +8,14 @@
 import UIKit
 import AVFoundation
 
+protocol VideoPlayerViewDelegate: AnyObject {
+    func didFinishPlaying()
+}
+
 final class VideoPlayerView: UIView {
+    
+    weak var delegate: VideoPlayerViewDelegate?
+    
     let videoURLString: String
     
     var avPlayer: AVPlayer?
@@ -37,6 +44,13 @@ final class VideoPlayerView: UIView {
         avPlayerItem = AVPlayerItem(url: videoURL)
         avPlayer = AVPlayer(playerItem: avPlayerItem)
         
+        NotificationCenter.default
+            .addObserver(self,
+            selector: #selector(didFinishPlaying),
+            name: .AVPlayerItemDidPlayToEndTime,
+            object: avPlayerItem
+        )
+        
         avPlayerLayer.player = avPlayer
         
         layer.addSublayer(avPlayerLayer)
@@ -52,5 +66,9 @@ final class VideoPlayerView: UIView {
     
     func pause() {
         avPlayer?.pause()
+    }
+    
+    @objc func didFinishPlaying() {
+        delegate?.didFinishPlaying()
     }
 }
