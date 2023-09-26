@@ -18,6 +18,14 @@ final class StudyVideoRecordView: UIView {
     
     let studyInfo: RtQuiz
     
+    var questionTexts: [String] {
+        let texts = try! JSONSerialization.jsonObject(with: Data(studyInfo.quizRepeat.diosttRepeatChunk.utf8)) as! [String]
+        
+        return texts
+    }
+    
+    private var recordTryCount = 0
+    
     private var isPlayingVideo = true
     private var isShowVideoPlayerControlView = false
     
@@ -57,6 +65,30 @@ final class StudyVideoRecordView: UIView {
     
     private lazy var questionBackgroundView = UIView().then {
         $0.backgroundColor = .init(red: 245 / 255, green: 245 / 255, blue: 245 / 255, alpha: 1)
+    }
+    
+    private lazy var hintTextLabel = UILabel().then {
+        $0.textColor = .black
+        $0.font = .systemFont(ofSize: 16, weight: .bold)
+        $0.textAlignment = .center
+    }
+    
+    private lazy var questionBoxView = UIView().then {
+        $0.layer.borderColor = UIColor(red: 255 / 255, green: 144 / 255, blue: 0, alpha: 1).cgColor
+        $0.layer.borderWidth = 2
+        $0.layer.cornerRadius = 2
+        $0.backgroundColor = .white
+    }
+    
+    private lazy var questionLabelBoxStackView = UIStackView().then {
+        $0.spacing = 8
+        $0.alignment = .center
+    }
+    
+    private lazy var questionBoxQuestionMarkLabel = UILabel().then {
+        $0.text = "?"
+        $0.textColor = UIColor(red: 255 / 255, green: 144 / 255, blue: 0, alpha: 1)
+        $0.font = .systemFont(ofSize: 16, weight: .bold)
     }
     
     private lazy var questionMeanLabel = UILabel().then {
@@ -121,7 +153,37 @@ final class StudyVideoRecordView: UIView {
     }
     
     @objc func didFinishRecord(_ sender: UIButton) {
-        delegate?.studyVideoRecordView(self, didFinishRecord: sender)
+        if recordTryCount == 2 {
+            delegate?.studyVideoRecordView(self, didFinishRecord: sender)
+            
+            return
+        }
+        
+        hintTextLabel.text = (hintTextLabel.text ?? "") + " " + questionTexts[recordTryCount]
+        
+        let remainQuestionText = questionTexts[(recordTryCount + 1)...].joined(separator: " ")
+        
+        var boxWidth = (remainQuestionText as NSString).size(
+            withAttributes: [
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .bold)
+            ]
+        ).width + 32
+        
+        if remainQuestionText.isEmpty {
+            boxWidth = 0
+            
+            questionBoxQuestionMarkLabel.removeFromSuperview()
+        }
+        
+        recordTryCount += 1
+        
+        self.questionBoxView.snp.updateConstraints {
+            $0.width.equalTo(boxWidth)
+        }
+        
+        UIView.animate(withDuration: 0.2) {
+            self.layoutIfNeeded()
+        }
     }
     
     private func setupLayout() {
@@ -132,6 +194,8 @@ final class StudyVideoRecordView: UIView {
             videoPlayerControlView,
             descriptionLabel,
             questionBackgroundView,
+            questionLabelBoxStackView,
+            questionBoxQuestionMarkLabel,
             questionMeanLabel,
             micButton
         ].forEach {
@@ -150,12 +214,12 @@ final class StudyVideoRecordView: UIView {
         midView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(videoPlayerView.snp.bottom)
-            $0.height.equalTo(frame.height / 3)
+            $0.bottom.equalTo(bottomView.snp.top)
         }
         
         bottomView.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
-            $0.top.equalTo(midView.snp.bottom)
+            $0.height.equalTo(frame.height / 3)
         }
         
         descriptionLabel.snp.makeConstraints {
@@ -169,9 +233,38 @@ final class StudyVideoRecordView: UIView {
             $0.bottom.equalTo(midView.snp.bottom)
         }
         
+        var boxWidth = (studyInfo.quizRepeat.repeatContentEng as NSString).size(
+            withAttributes: [
+                NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .bold)
+            ]
+        ).width + 32
+        
+        if boxWidth < 80 {
+            boxWidth = 80
+        } else if boxWidth > frame.width - 32 {
+            boxWidth = frame.width - 32
+        }
+        
+        questionBoxView.snp.makeConstraints {
+            $0.height.equalTo(32)
+            $0.width.equalTo(boxWidth)
+        }
+        
+        questionLabelBoxStackView.snp.makeConstraints {
+            $0.centerX.equalTo(questionBackgroundView.snp.centerX)
+            $0.bottom.equalTo(questionBackgroundView.snp.centerY).offset(-8)
+        }
+        
+        questionLabelBoxStackView.addArrangedSubview(hintTextLabel)
+        questionLabelBoxStackView.addArrangedSubview(questionBoxView)
+        
+        questionBoxQuestionMarkLabel.snp.makeConstraints {
+            $0.center.equalTo(questionBoxView.snp.center)
+        }
+        
         questionMeanLabel.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(16)
-            $0.top.equalTo(questionBackgroundView.snp.centerY).offset(16)
+            $0.top.equalTo(questionBackgroundView.snp.centerY).offset(8)
         }
         
         micButton.snp.makeConstraints {

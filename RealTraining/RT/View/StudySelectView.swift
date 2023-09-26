@@ -279,7 +279,7 @@ final class StudySelectView: UIView {
             
             questionBoxes.append(boxView)
             
-            var boxWidth = (boxText as NSString).size(withAttributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16, weight: .bold)]).width + 32
+            var boxWidth = (boxText as NSString).size(withAttributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16, weight: .bold)]).width + 32
             
             if boxWidth < 80 {
                 boxWidth = 80
