@@ -27,6 +27,7 @@ final class StudyVideoRecordView: UIView {
     private var recordTryCount = 0
     
     private var isPlayingVideo = true
+    private var isFinishPlayingVideo = false
     private var isShowVideoPlayerControlView = false
     
     private lazy var midView = UIView()
@@ -131,6 +132,8 @@ final class StudyVideoRecordView: UIView {
     }
     
     @objc func didTapVideoPlayerControlView() {
+        if isFinishPlayingVideo { return }
+        
         let backgroundColor: UIColor = isShowVideoPlayerControlView ? .clear : .black.withAlphaComponent(0.5)
         
         videoPlayerControlView.backgroundColor = backgroundColor
@@ -287,6 +290,11 @@ final class StudyVideoRecordView: UIView {
 
 extension StudyVideoRecordView: VideoPlayerViewDelegate {
     func didFinishPlaying() {
+        
+        isFinishPlayingVideo = true
+        
+        videoPlayerControlView.backgroundColor = .clear
+        videoPlayerPlayPauseButton.isHidden = true
         
         let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         visualEffectView.alpha = 0.8
