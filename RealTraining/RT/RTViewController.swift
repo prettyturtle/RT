@@ -5,7 +5,6 @@
 //  Created by yc on 2023/09/08.
 //
 
-
 import UIKit
 import SnapKit
 import Then
@@ -15,6 +14,8 @@ final class RTViewController: UIViewController {
     let studyInfos: RTModel? = decodeJSONInBundle(fileName: "StudyInfo")
     
     var currentStudyIdx = 0
+    
+    private var studyResults = [RtQuiz]()
     
     private lazy var leftBarButton = UIBarButtonItem(
         image: UIImage(systemName: "xmark"),
@@ -40,6 +41,7 @@ final class RTViewController: UIViewController {
     private var studyThumbnailView: StudyThumbnailView?
     private var studySelectView: StudySelectView?
     private var studyVideoRecordView: StudyVideoRecordView?
+    private var feedbackView: FeedbackView?
     
     private var videoPlayerView: VideoPlayerView?
     
@@ -81,23 +83,25 @@ final class RTViewController: UIViewController {
     }
     
     @objc func didTapSettingButton(_ sender: UIBarButtonItem) {
-        let popupVC = PopupViewController()
-        
-        popupVC.isBackgroundTapDismissEnabled = true
-        popupVC.modalPresentationStyle = .overFullScreen
-        
-        popupVC.setupView(
-            title: "학습중지",
-            message: "현재 학습중이던 에피소드를 중지하고 학습목록으로 이동하시겠습니까?",
-            buttonType: .one(
-                title: "확인",
-                action: {
-                    print("확인 누름")
-                }
-            )
+        // MARK: - 피드백 화면 이동 테스트
+        feedbackView = FeedbackView(
+            studyResults: studyInfos!.rtQuizList.rtQuiz,
+            frame: view.safeAreaLayoutGuide.layoutFrame
         )
         
-        present(popupVC, animated: false)
+        navigationItem.title = ""
+        
+        mainView.addSubview(feedbackView!)
+        
+        feedbackView!.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        feedbackView?.transform = CGAffineTransform(scaleX: 0, y: 0)
+        
+        UIView.animate(withDuration: 0.3) {
+            self.feedbackView?.transform = .identity
+        }
     }
     
     private func setupNavigationBar() {
@@ -218,11 +222,34 @@ extension RTViewController: StudySelectViewDelegate {
 }
 
 extension RTViewController: StudyVideoRecordViewDelegate {
-    func studyVideoRecordView(_ srv: StudyVideoRecordView, didFinishRecord: UIButton) {
+    func studyVideoRecordView(_ srv: StudyVideoRecordView, didFinishStep: UIButton, studyResult: RtQuiz) {
+        studyResults.append(studyResult)
+        
         currentStudyIdx += 1
         
         if currentStudyIdx == studyInfos!.rtQuizList.rtQuiz.count {
-            dismiss(animated: true)
+            // MARK: - 피드백 화면으로 이동
+            
+            feedbackView = FeedbackView(studyResults: studyResults, frame: view.safeAreaLayoutGuide.layoutFrame)
+            
+            navigationItem.title = ""
+            
+            mainView.addSubview(feedbackView!)
+            
+            feedbackView!.snp.makeConstraints {
+                $0.edges.equalToSuperview()
+            }
+            
+            feedbackView?.transform = CGAffineTransform(scaleX: 0, y: 0)
+            
+            UIView.animate(withDuration: 0.3) {
+                self.feedbackView?.transform = .identity
+            } completion: { [weak self] _ in
+                srv.removeFromSuperview()
+                self?.studyVideoRecordView = nil
+                self?.videoPlayerView = nil
+            }
+            
             return
         }
         

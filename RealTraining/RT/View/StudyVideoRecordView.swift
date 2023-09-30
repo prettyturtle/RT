@@ -10,7 +10,7 @@ import SnapKit
 import Then
 
 protocol StudyVideoRecordViewDelegate: AnyObject {
-    func studyVideoRecordView(_ srv: StudyVideoRecordView, didFinishRecord: UIButton)
+    func studyVideoRecordView(_ srv: StudyVideoRecordView, didFinishStep: UIButton, studyResult: RtQuiz)
 }
 
 final class StudyVideoRecordView: UIView {
@@ -157,7 +157,7 @@ final class StudyVideoRecordView: UIView {
     
     @objc func didFinishRecord(_ sender: UIButton) {
         if recordTryCount == 2 {
-            delegate?.studyVideoRecordView(self, didFinishRecord: sender)
+            delegate?.studyVideoRecordView(self, didFinishStep: sender, studyResult: studyInfo)
             
             return
         }
