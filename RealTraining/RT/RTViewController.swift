@@ -92,125 +92,8 @@ final class RTViewController: UIViewController {
         navigationItem.title = ""
         navigationItem.rightBarButtonItem = nil
         
-        let resultGageView = UIStackView().then {
-            $0.spacing = 4
-        }
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: resultGageView)
-        
-        let levelGageBox = UIView().then {
-            $0.layer.borderColor = UIColor.separator.cgColor
-            $0.layer.borderWidth = 0.4
-        }
-        
-        let levelGageLabel = UILabel().then {
-            $0.text = "Level"
-            $0.textColor = .init(hexCode: "4ab4fb")
-            $0.font = .systemFont(ofSize: 12, weight: .bold)
-        }
-        
-        let levelGageBarBackgroundView = UIView().then {
-            $0.backgroundColor = .init(hexCode: "c5c4c4")
-        }
-        
-        let levelNumLabel = UILabel().then {
-            $0.text = "25"
-            $0.font = .systemFont(ofSize: 12, weight: .bold)
-            $0.textColor = .white
-        }
-        
-        let levelGageBarView = UIView().then {
-            $0.backgroundColor = .init(hexCode: "4ab4fb")
-        }
-        
-        [
-            levelGageLabel,
-            levelGageBarBackgroundView,
-            levelGageBarView,
-            levelNumLabel
-        ].forEach {
-            levelGageBox.addSubview($0)
-        }
-        
-        levelGageLabel.snp.makeConstraints {
-            $0.leading.top.bottom.equalToSuperview().inset(4)
-        }
-        levelGageBarBackgroundView.snp.makeConstraints {
-            $0.width.equalTo(50)
-            $0.top.trailing.bottom.equalToSuperview().inset(4)
-            $0.leading.equalTo(levelGageLabel.snp.trailing).offset(4)
-            $0.height.equalTo(18)
-        }
-        levelGageBarView.snp.makeConstraints {
-            $0.leading.top.bottom.equalTo(levelGageBarBackgroundView)
-            $0.width.equalTo(levelGageBarBackgroundView).multipliedBy(0.25)
-        }
-        levelNumLabel.snp.makeConstraints {
-            $0.leading.trailing.equalTo(levelGageBarBackgroundView).inset(4)
-            $0.centerY.equalTo(levelGageBarBackgroundView)
-        }
-        
-        levelGageBarView.transform = CGAffineTransform(scaleX: 0, y: 1)
-        
-        resultGageView.addArrangedSubview(levelGageBox)
-        
-        // ---
-        
-        let scoreGageBox = UIView().then {
-            $0.layer.borderColor = UIColor.separator.cgColor
-            $0.layer.borderWidth = 0.4
-        }
-        
-        let scoreGageLabel = UILabel().then {
-            $0.text = "Score"
-            $0.textColor = .init(hexCode: "f16b59")
-            $0.font = .systemFont(ofSize: 12, weight: .bold)
-        }
-        
-        let scoreGageBarBackgroundView = UIView().then {
-            $0.backgroundColor = .init(hexCode: "c5c4c4")
-        }
-        
-        let scoreNumLabel = UILabel().then {
-            $0.text = "750"
-            $0.font = .systemFont(ofSize: 12, weight: .bold)
-            $0.textColor = .white
-        }
-        
-        let scoreGageBarView = UIView().then {
-            $0.backgroundColor = .init(hexCode: "f16b59")
-        }
-        
-        [
-            scoreGageLabel,
-            scoreGageBarBackgroundView,
-            scoreGageBarView,
-            scoreNumLabel
-        ].forEach {
-            scoreGageBox.addSubview($0)
-        }
-        
-        scoreGageLabel.snp.makeConstraints {
-            $0.leading.top.bottom.equalToSuperview().inset(4)
-        }
-        scoreGageBarBackgroundView.snp.makeConstraints {
-            $0.width.equalTo(50)
-            $0.top.trailing.bottom.equalToSuperview().inset(4)
-            $0.leading.equalTo(scoreGageLabel.snp.trailing).offset(4)
-            $0.height.equalTo(18)
-        }
-        scoreGageBarView.snp.makeConstraints {
-            $0.leading.top.bottom.equalTo(scoreGageBarBackgroundView)
-            $0.width.equalTo(scoreGageBarBackgroundView).multipliedBy(0.75)
-        }
-        scoreNumLabel.snp.makeConstraints {
-            $0.leading.trailing.equalTo(scoreGageBarBackgroundView).inset(4)
-            $0.centerY.equalTo(scoreGageBarBackgroundView)
-        }
-        
-        scoreGageBarView.transform = CGAffineTransform(scaleX: 0, y: 1)
-        
-        resultGageView.addArrangedSubview(scoreGageBox)
+        let feedbackGageView = FeedbackGageView(level: 25, levelPercent: 30, score: 750, maxScore: 1000)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: feedbackGageView)
         
         mainView.addSubview(feedbackView!)
         
@@ -222,9 +105,6 @@ final class RTViewController: UIViewController {
         
         UIView.animate(withDuration: 0.3) {
             self.feedbackView?.transform = .identity
-        } completion: { _ in
-            levelGageBarView.transform = CGAffineTransform(scaleX: 1, y: 1)
-            scoreGageBarView.transform = CGAffineTransform(scaleX: 1, y: 1)
         }
     }
     
@@ -354,26 +234,16 @@ extension RTViewController: StudyVideoRecordViewDelegate {
         if currentStudyIdx == studyInfos!.rtQuizList.rtQuiz.count {
             // MARK: - 피드백 화면으로 이동
             
-            feedbackView = FeedbackView(studyResults: studyResults, frame: view.safeAreaLayoutGuide.layoutFrame)
+            feedbackView = FeedbackView(
+                studyResults: studyInfos!.rtQuizList.rtQuiz,
+                frame: view.safeAreaLayoutGuide.layoutFrame
+            )
             
             navigationItem.title = ""
             navigationItem.rightBarButtonItem = nil
             
-            let resultGageView = UIView().then {
-                $0.backgroundColor = .red
-            }
-            
-            navigationItem.titleView = resultGageView
-            
-            
-            resultGageView.snp.makeConstraints {
-                $0.top.bottom.equalToSuperview()
-                $0.trailing.equalToSuperview().inset(16)
-                $0.width.equalTo(100)
-            }
-            
-            
-            
+            let feedbackGageView = FeedbackGageView(level: 25, levelPercent: 30, score: 750, maxScore: 1000)
+            navigationItem.rightBarButtonItem = UIBarButtonItem(customView: feedbackGageView)
             
             mainView.addSubview(feedbackView!)
             
