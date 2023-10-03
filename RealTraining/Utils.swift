@@ -29,7 +29,6 @@ func decodeJSONInBundle<T: Codable>(fileName: String) -> T? {
 let haptic = UISelectionFeedbackGenerator()
 
 // MARK: - FX Player
-
 var fxPlayer: AVAudioPlayer?
 
 func playFX(_ fileName: String) {
@@ -39,4 +38,32 @@ func playFX(_ fileName: String) {
     
     fxPlayer = try? AVAudioPlayer(contentsOf: url)
     fxPlayer?.play()
+}
+
+// MARK: - Sound Player
+var soundPlayer: AVAudioPlayer?
+var soundCacheDic = [String: Data]()
+
+func playSound(urlString: String) {
+    var soundData: Data
+    
+    if let cachedSoundData = soundCacheDic[urlString] {
+        soundData = cachedSoundData
+    } else {
+        guard let url = URL(string: urlString) else {
+            return
+        }
+        
+        guard let data = try? Data(contentsOf: url) else {
+            return
+        }
+        
+        soundCacheDic[urlString] = data
+        
+        soundData = data
+    }
+    
+    soundPlayer = try? AVAudioPlayer(data: soundData)
+    
+    soundPlayer?.play()
 }

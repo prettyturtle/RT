@@ -42,6 +42,19 @@ final class FeedbackResultTableViewCell: UITableViewCell {
         $0.layer.borderWidth = 0.4
         $0.layer.borderColor = UIColor.separator.cgColor
         $0.layer.cornerRadius = 13
+        $0.addTarget(
+            self, 
+            action: #selector(didTapNativeVoicePlayButton),
+            for: .touchUpInside
+        )
+    }
+    
+    @objc func didTapNativeVoicePlayButton(_ sender: UIButton) {
+        guard let studyInfo = studyInfo else {
+            return
+        }
+        
+        playSound(urlString: studyInfo.quizRepeat.repeatContentMp3)
     }
     
     func setupView() {
@@ -52,7 +65,6 @@ final class FeedbackResultTableViewCell: UITableViewCell {
         setupLayout()
         
         resultSentenceLabel.text = studyInfo.contentEng.replacingOccurrences(of: "|", with: "")
-        
         resultMeanLabel.text = studyInfo.contentKor
     }
     
@@ -63,7 +75,7 @@ final class FeedbackResultTableViewCell: UITableViewCell {
             myVoicePlayButton,
             nativeVoicePlayButton
         ].forEach {
-            addSubview($0)
+            contentView.addSubview($0)
         }
         
         resultSentenceLabel.snp.makeConstraints {
