@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6B8E10922ACAA170002FD93A /* FeedbackGageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8E10912ACAA170002FD93A /* FeedbackGageView.swift */; };
+		6B8E10942ACBF8CD002FD93A /* Feedback.json in Resources */ = {isa = PBXBuildFile; fileRef = 6B8E10932ACBF8CC002FD93A /* Feedback.json */; };
 		6BA575812AB098510002704E /* StudySelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA575802AB098510002704E /* StudySelectView.swift */; };
 		6BA575832AB1DFC80002704E /* ChoiceButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA575822AB1DFC80002704E /* ChoiceButton.swift */; };
 		6BA575882AB20EF30002704E /* sfx_correct.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6BA575862AB20EF30002704E /* sfx_correct.mp3 */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		6B8E10912ACAA170002FD93A /* FeedbackGageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackGageView.swift; sourceTree = "<group>"; };
+		6B8E10932ACBF8CC002FD93A /* Feedback.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Feedback.json; sourceTree = "<group>"; };
 		6BA575802AB098510002704E /* StudySelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudySelectView.swift; sourceTree = "<group>"; };
 		6BA575822AB1DFC80002704E /* ChoiceButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChoiceButton.swift; sourceTree = "<group>"; };
 		6BA575862AB20EF30002704E /* sfx_correct.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sfx_correct.mp3; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				6BF8A40A2AAF6A2200549893 /* Utils.swift */,
 				6BBB0C672AC88CE8000C89FF /* UIColor+.swift */,
 				6BF8A3DC2AADD77B00549893 /* StudyInfo.json */,
+				6B8E10932ACBF8CC002FD93A /* Feedback.json */,
 				6BDB07EA2AAB65010015B2DE /* Main.storyboard */,
 				6BDB07ED2AAB65030015B2DE /* Assets.xcassets */,
 				6BDB07EF2AAB65030015B2DE /* LaunchScreen.storyboard */,
@@ -246,6 +249,7 @@
 				6BA575882AB20EF30002704E /* sfx_correct.mp3 in Resources */,
 				6BA575892AB20EF30002704E /* sfx_wrong.mp3 in Resources */,
 				6BDB07EE2AAB65030015B2DE /* Assets.xcassets in Resources */,
+				6B8E10942ACBF8CD002FD93A /* Feedback.json in Resources */,
 				6BDB07EC2AAB65010015B2DE /* Main.storyboard in Resources */,
 				6BF8A3DD2AADD77B00549893 /* StudyInfo.json in Resources */,
 			);
