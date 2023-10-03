@@ -84,15 +84,25 @@ final class RTViewController: UIViewController {
     
     @objc func didTapSettingButton(_ sender: UIBarButtonItem) {
         // MARK: - 피드백 화면 이동 테스트
+        guard let feedback: RTFeedbackModel = decodeJSONInBundle(fileName: "Feedback") else {
+            return
+        }
+        
         feedbackView = FeedbackView(
-            studyResults: studyInfos!.rtQuizList.rtQuiz,
+            studyInfos: studyInfos!.rtQuizList.rtQuiz,
+            feedback: feedback,
             frame: view.safeAreaLayoutGuide.layoutFrame
         )
         
         navigationItem.title = ""
         navigationItem.rightBarButtonItem = nil
         
-        let feedbackGageView = FeedbackGageView(level: 25, levelPercent: 30, score: 750, maxScore: 1000)
+        let feedbackGageView = FeedbackGageView(
+            level: feedback.feedbackRTraining.updPlayerInfo.level,
+            levelPercent: feedback.feedbackRTraining.updPlayerInfo.levelPercent,
+            score: feedback.feedbackRTraining.getCellScore,
+            maxScore: feedback.feedbackRTraining.maxCellScore
+        )
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: feedbackGageView)
         
         mainView.addSubview(feedbackView!)
@@ -233,16 +243,26 @@ extension RTViewController: StudyVideoRecordViewDelegate {
         
         if currentStudyIdx == studyInfos!.rtQuizList.rtQuiz.count {
             // MARK: - 피드백 화면으로 이동
+            guard let feedback: RTFeedbackModel = decodeJSONInBundle(fileName: "Feedback") else {
+                return
+            }
             
             feedbackView = FeedbackView(
-                studyResults: studyInfos!.rtQuizList.rtQuiz,
+                studyInfos: studyInfos!.rtQuizList.rtQuiz,
+                feedback: feedback,
                 frame: view.safeAreaLayoutGuide.layoutFrame
             )
             
             navigationItem.title = ""
             navigationItem.rightBarButtonItem = nil
             
-            let feedbackGageView = FeedbackGageView(level: 25, levelPercent: 30, score: 750, maxScore: 1000)
+            let feedbackGageView = FeedbackGageView(
+                level: feedback.feedbackRTraining.updPlayerInfo.level,
+                levelPercent: feedback.feedbackRTraining.updPlayerInfo.levelPercent,
+                score: feedback.feedbackRTraining.getCellScore,
+                maxScore: feedback.feedbackRTraining.maxCellScore
+            )
+            
             navigationItem.rightBarButtonItem = UIBarButtonItem(customView: feedbackGageView)
             
             mainView.addSubview(feedbackView!)

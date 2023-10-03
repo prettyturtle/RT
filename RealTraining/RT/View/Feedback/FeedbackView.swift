@@ -10,7 +10,8 @@ import SnapKit
 import Then
 
 final class FeedbackView: UIView {
-    let studyResults: [RtQuiz]
+    let studyInfos: [RtQuiz]
+    let feedback: RTFeedbackModel
     
     private lazy var titleLabel = UILabel().then {
         $0.text = "학습한 문장을 확인해 보세요."
@@ -74,8 +75,9 @@ final class FeedbackView: UIView {
         $0.configuration = buttonConfig
     }
     
-    init(studyResults: [RtQuiz], frame: CGRect) {
-        self.studyResults = studyResults
+    init(studyInfos: [RtQuiz], feedback: RTFeedbackModel, frame: CGRect) {
+        self.studyInfos = studyInfos
+        self.feedback = feedback
         super.init(frame: frame)
         
         backgroundColor = .white
@@ -126,7 +128,7 @@ final class FeedbackView: UIView {
 
 extension FeedbackView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return studyResults.count
+        return studyInfos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -139,7 +141,8 @@ extension FeedbackView: UITableViewDataSource {
         
         cell.separatorInset = .init(top: 0, left: 16, bottom: 0, right: 16)
         cell.selectionStyle = .none
-        cell.result = studyResults[indexPath.row]
+        cell.studyInfo = studyInfos[indexPath.row]
+        cell.feedback = feedback
         cell.setupView()
         
         return cell

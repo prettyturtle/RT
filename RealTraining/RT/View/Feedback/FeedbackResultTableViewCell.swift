@@ -12,7 +12,8 @@ import Then
 final class FeedbackResultTableViewCell: UITableViewCell {
     static let identifier = "FeedbackResultTableViewCell"
     
-    var result: RtQuiz?
+    var studyInfo: RtQuiz?
+    var feedback: RTFeedbackModel?
     
     private lazy var resultSentenceLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 16, weight: .bold)
@@ -44,15 +45,15 @@ final class FeedbackResultTableViewCell: UITableViewCell {
     }
     
     func setupView() {
-        guard let result = result else {
+        guard let studyInfo = studyInfo else {
             return
         }
         
         setupLayout()
         
-        resultSentenceLabel.text = result.contentEng.replacingOccurrences(of: "|", with: "")
+        resultSentenceLabel.text = studyInfo.contentEng.replacingOccurrences(of: "|", with: "")
         
-        resultMeanLabel.text = result.contentKor
+        resultMeanLabel.text = studyInfo.contentKor
     }
     
     private func setupLayout() {
