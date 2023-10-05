@@ -18,11 +18,7 @@ final class StudyVideoRecordView: UIView {
     
     let studyInfo: RtQuiz
     
-    var questionTexts: [String] {
-        let texts = try! JSONSerialization.jsonObject(with: Data(studyInfo.quizRepeat.diosttRepeatChunk.utf8)) as! [String]
-        
-        return texts
-    }
+    private var questionTexts: [String]
     
     private var recordTryCount = 0
     
@@ -72,6 +68,7 @@ final class StudyVideoRecordView: UIView {
         $0.textColor = .black
         $0.font = .systemFont(ofSize: 16, weight: .bold)
         $0.textAlignment = .center
+        $0.isHidden = true
     }
     
     private lazy var questionBoxView = UIView().then {
@@ -113,6 +110,7 @@ final class StudyVideoRecordView: UIView {
     init(studyInfo: RtQuiz, videoPlayerView: VideoPlayerView, frame: CGRect) {
         self.studyInfo = studyInfo
         self.videoPlayerView = videoPlayerView
+        self.questionTexts = studyInfo.quizRepeat.diosttRepeatChunk
         super.init(frame: frame)
         backgroundColor = .white
         setupLayout()
@@ -162,6 +160,7 @@ final class StudyVideoRecordView: UIView {
             return
         }
         
+        hintTextLabel.isHidden = false
         hintTextLabel.text = (hintTextLabel.text ?? "") + " " + questionTexts[recordTryCount]
         
         let remainQuestionText = questionTexts[(recordTryCount + 1)...].joined(separator: " ")

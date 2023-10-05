@@ -19,19 +19,9 @@ final class StudySelectView: UIView {
     
     let studyInfo: RtQuiz
     
-    var questionTexts: [String] {
-        let texts = try! JSONSerialization.jsonObject(with: Data(studyInfo.quizRepeat.diosttRepeatChunk.utf8)) as! [String]
-        
-        return texts
-    }
+    private var questionTexts: [String]
     
-    var questionDic: [String: [String]] {
-        
-        let chunkList = studyInfo.quizMakeup.chunkList
-        let jsonChunkList = try! JSONSerialization.jsonObject(with: Data(chunkList.utf8)) as! [String: [String]]
-        
-        return jsonChunkList
-    }
+    private let questionDic: [String: [String]]
     
     var currentQuestionStep = 0
     
@@ -106,6 +96,8 @@ final class StudySelectView: UIView {
     
     init(studyInfo: RtQuiz, frame: CGRect) {
         self.studyInfo = studyInfo
+        self.questionDic = studyInfo.quizMakeup.chunkList
+        self.questionTexts = studyInfo.quizRepeat.diosttRepeatChunk
         super.init(frame: frame)
         backgroundColor = .white
         setupLayout()

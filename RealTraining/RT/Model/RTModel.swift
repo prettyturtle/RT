@@ -28,22 +28,54 @@ struct RtQuiz: Codable {
 
 // MARK: - QuizMakeup
 struct QuizMakeup: Codable {
-    let chunkList: String
+    private let _chunkList: String
+    var chunkList: [String: [String]] {
+        guard let chunkListData = _chunkList.data(using: .utf8),
+              let chunkListJSON = try? JSONSerialization.jsonObject(with: chunkListData) as? [String: [String]] else {
+            return [:]
+        }
+        
+        return chunkListJSON
+    }
+    
     let bgImg: String
     let boxType: String
     let boxPosX, boxPosY: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case _chunkList = "chunkList"
+        case bgImg, boxType, boxPosX, boxPosY
+    }
 }
 
 // MARK: - QuizRepeat
 struct QuizRepeat: Codable {
     let repeatContentEng, repeatContentKor: String
     let repeatContentMp3: String
-    let diosttRepeatScript, diosttRepeatChunk: String
+    private let _diosttRepeatScript, _diosttRepeatChunk: String
+    
+    var diosttRepeatScript: [String] {
+        guard let diosttRepeatScriptData = _diosttRepeatScript.data(using: .utf8),
+              let diosttRepeatScriptJSON = try? JSONSerialization.jsonObject(with: diosttRepeatScriptData) as? [String] else {
+            return []
+        }
+        
+        return diosttRepeatScriptJSON
+    }
+    
+    var diosttRepeatChunk: [String] {
+        guard let diosttRepeatChunkData = _diosttRepeatChunk.data(using: .utf8),
+              let diosttRepeatChunkJSON = try? JSONSerialization.jsonObject(with: diosttRepeatChunkData) as? [String] else {
+            return []
+        }
+        
+        return diosttRepeatChunkJSON
+    }
     
     enum CodingKeys: String, CodingKey {
         case repeatContentEng, repeatContentKor, repeatContentMp3
-        case diosttRepeatScript = "DIOSTT_repeatScript"
-        case diosttRepeatChunk = "DIOSTT_repeatChunk"
+        case _diosttRepeatScript = "DIOSTT_repeatScript"
+        case _diosttRepeatChunk = "DIOSTT_repeatChunk"
     }
 }
 
