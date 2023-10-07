@@ -25,6 +25,7 @@ final class StudyVideoRecordView: UIView {
     private var isPlayingVideo = true
     private var isFinishPlayingVideo = false
     private var isShowVideoPlayerControlView = false
+    private var videoPlayerControlViewHideHandler: DispatchWorkItem?
     
     private lazy var midView = UIView()
     private lazy var bottomView = UIView()
@@ -138,6 +139,24 @@ final class StudyVideoRecordView: UIView {
         videoPlayerPlayPauseButton.isHidden = isShowVideoPlayerControlView
         
         isShowVideoPlayerControlView.toggle()
+        
+        if isShowVideoPlayerControlView {
+            videoPlayerControlViewHideHandler = DispatchWorkItem(block: { [weak self] in
+                guard let self = self else {
+                    return
+                }
+                
+                self.videoPlayerControlView.backgroundColor = .clear
+                self.videoPlayerPlayPauseButton.isHidden = true
+                
+                self.isShowVideoPlayerControlView = false
+            })
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: videoPlayerControlViewHideHandler!)
+        } else {
+            videoPlayerControlViewHideHandler?.cancel()
+            videoPlayerControlViewHideHandler = nil
+        }
     }
     
     @objc func didTapVideoPlayerPlayPauseButton(_ sender: UIButton) {
