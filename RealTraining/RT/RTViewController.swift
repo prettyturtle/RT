@@ -11,7 +11,16 @@ import Then
 
 final class RTViewController: UIViewController {
     
-    let studyInfos: RTModel? = decodeJSONInBundle(fileName: "StudyInfo")
+    let studyInfos: RTModel
+    
+    init(studyInfos: RTModel) {
+        self.studyInfos = studyInfos
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     var currentStudyIdx = 0
     
@@ -89,7 +98,7 @@ final class RTViewController: UIViewController {
         }
         
         feedbackView = FeedbackView(
-            studyInfos: studyInfos!.rtQuizList.rtQuiz,
+            studyInfos: studyInfos.rtQuizList.rtQuiz,
             feedback: feedback,
             frame: view.safeAreaLayoutGuide.layoutFrame
         )
@@ -149,8 +158,8 @@ final class RTViewController: UIViewController {
 
 extension RTViewController: IntroViewDelegate {
     func introView(_ iv: IntroView, didTapStartButton startButton: UIButton) {
-        studyThumbnailView = StudyThumbnailView(studyInfo: studyInfos!.rtQuizList.rtQuiz[currentStudyIdx])
-        navigationItem.title = "Question \(currentStudyIdx + 1) of \(studyInfos!.rtQuizList.rtQuiz.count)"
+        studyThumbnailView = StudyThumbnailView(studyInfo: studyInfos.rtQuizList.rtQuiz[currentStudyIdx])
+        navigationItem.title = "Question \(currentStudyIdx + 1) of \(studyInfos.rtQuizList.rtQuiz.count)"
         
         studyThumbnailView?.delegate = self
         
@@ -175,13 +184,13 @@ extension RTViewController: IntroViewDelegate {
 extension RTViewController: StudyThumbnailViewDelegate {
     func studyView(_ sv: StudyThumbnailView, didTapStartButton startButton: UIButton) {
         videoPlayerView = VideoPlayerView(
-            videoURLString: studyInfos!.rtQuizList.rtQuiz[currentStudyIdx].quizResource.movPath
+            videoURLString: studyInfos.rtQuizList.rtQuiz[currentStudyIdx].quizResource.movPath
         )
         
         videoPlayerView?.setupPlayer()
         
         studySelectView = StudySelectView(
-            studyInfo: studyInfos!.rtQuizList.rtQuiz[currentStudyIdx],
+            studyInfo: studyInfos.rtQuizList.rtQuiz[currentStudyIdx],
             frame: view.safeAreaLayoutGuide.layoutFrame
         )
         
@@ -210,7 +219,7 @@ extension RTViewController: StudySelectViewDelegate {
         guard let videoPlayerView = videoPlayerView else { return }
         
         studyVideoRecordView = StudyVideoRecordView(
-            studyInfo: studyInfos!.rtQuizList.rtQuiz[currentStudyIdx],
+            studyInfo: studyInfos.rtQuizList.rtQuiz[currentStudyIdx],
             videoPlayerView: videoPlayerView,
             frame: view.safeAreaLayoutGuide.layoutFrame
         )
@@ -241,14 +250,14 @@ extension RTViewController: StudyVideoRecordViewDelegate {
         
         currentStudyIdx += 1
         
-        if currentStudyIdx == studyInfos!.rtQuizList.rtQuiz.count {
+        if currentStudyIdx == studyInfos.rtQuizList.rtQuiz.count {
             // MARK: - 피드백 화면으로 이동
             guard let feedback: RTFeedbackModel = decodeJSONInBundle(fileName: "Feedback") else {
                 return
             }
             
             feedbackView = FeedbackView(
-                studyInfos: studyInfos!.rtQuizList.rtQuiz,
+                studyInfos: studyInfos.rtQuizList.rtQuiz,
                 feedback: feedback,
                 frame: view.safeAreaLayoutGuide.layoutFrame
             )
@@ -284,8 +293,8 @@ extension RTViewController: StudyVideoRecordViewDelegate {
             return
         }
         
-        studyThumbnailView = StudyThumbnailView(studyInfo: studyInfos!.rtQuizList.rtQuiz[currentStudyIdx])
-        navigationItem.title = "Question \(currentStudyIdx + 1) of \(studyInfos!.rtQuizList.rtQuiz.count)"
+        studyThumbnailView = StudyThumbnailView(studyInfo: studyInfos.rtQuizList.rtQuiz[currentStudyIdx])
+        navigationItem.title = "Question \(currentStudyIdx + 1) of \(studyInfos.rtQuizList.rtQuiz.count)"
         
         studyThumbnailView?.delegate = self
         

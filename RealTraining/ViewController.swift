@@ -9,6 +9,7 @@ import UIKit
 import SwiftUI
 import SnapKit
 import Then
+import XMLCoder
 
 final class ViewController: UIViewController {
     
@@ -33,12 +34,32 @@ final class ViewController: UIViewController {
     }
     
     @objc func didTapRTOpenButton(_ sender: UIButton) {
-        let vc = RTViewController()
-        let nc = UINavigationController(rootViewController: vc)
-        
-        nc.modalPresentationStyle = .overFullScreen
-        
-        present(nc, animated: true)
+        API.getStudyInfo().request(method: "POST") { [weak self] result in
+            guard let self = self else {
+                return
+            }
+            
+            switch result {
+            case .success(let data):
+                let xmlDecoder = XMLDecoder()
+                do {
+                    let studyInfos = try xmlDecoder.decode(RTModel.self, from: data)
+                    
+                    DispatchQueue.main.async {
+                        let vc = RTViewController(studyInfos: studyInfos)
+                        let nc = UINavigationController(rootViewController: vc)
+                        
+                        nc.modalPresentationStyle = .overFullScreen
+                        
+                        self.present(nc, animated: true)
+                    }
+                } catch {
+                    print("ERROR : \(error)")
+                }
+            case .failure(let error):
+                print("ERROR : \(error)")
+            }
+        }
     }
 }
 
