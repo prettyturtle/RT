@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		6B1E6C992ACC11F700F13654 /* Feedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1E6C982ACC11F700F13654 /* Feedback.swift */; };
+		6B1E6C9E2AD30BFE00F13654 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1E6C9D2AD30BFD00F13654 /* API.swift */; };
+		6B1E6CA02AD30C1000F13654 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1E6C9F2AD30C1000F13654 /* Network.swift */; };
+		6B1E6CA32AD30CA200F13654 /* Constant.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6B1E6CA22AD30CA200F13654 /* Constant.plist */; };
 		6B8E10922ACAA170002FD93A /* FeedbackGageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8E10912ACAA170002FD93A /* FeedbackGageView.swift */; };
 		6B8E10942ACBF8CD002FD93A /* Feedback.json in Resources */ = {isa = PBXBuildFile; fileRef = 6B8E10932ACBF8CC002FD93A /* Feedback.json */; };
 		6BA575812AB098510002704E /* StudySelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA575802AB098510002704E /* StudySelectView.swift */; };
@@ -40,6 +43,9 @@
 
 /* Begin PBXFileReference section */
 		6B1E6C982ACC11F700F13654 /* Feedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feedback.swift; sourceTree = "<group>"; };
+		6B1E6C9D2AD30BFD00F13654 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		6B1E6C9F2AD30C1000F13654 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		6B1E6CA22AD30CA200F13654 /* Constant.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Constant.plist; sourceTree = "<group>"; };
 		6B8E10912ACAA170002FD93A /* FeedbackGageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackGageView.swift; sourceTree = "<group>"; };
 		6B8E10932ACBF8CC002FD93A /* Feedback.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Feedback.json; sourceTree = "<group>"; };
 		6BA575802AB098510002704E /* StudySelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudySelectView.swift; sourceTree = "<group>"; };
@@ -83,6 +89,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6B1E6CA12AD30C1E00F13654 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				6BBB0C3E2AC0083A000C89FF /* ImageFetcher.swift */,
+				6B1E6C9D2AD30BFD00F13654 /* API.swift */,
+				6B1E6C9F2AD30C1000F13654 /* Network.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		6BA575842AB1DFD00002704E /* Component */ = {
 			isa = PBXGroup;
 			children = (
@@ -135,10 +151,11 @@
 				6BDB07E62AAB65010015B2DE /* SceneDelegate.swift */,
 				6BF8A4102AAF6A8B00549893 /* RT */,
 				6BDB07E82AAB65010015B2DE /* ViewController.swift */,
-				6BBB0C3E2AC0083A000C89FF /* ImageFetcher.swift */,
+				6B1E6CA12AD30C1E00F13654 /* Network */,
 				6BBB0C3C2ABF54EB000C89FF /* VideoPlayerView.swift */,
 				6BF8A40E2AAF6A6C00549893 /* UIViewControllerPreview.swift */,
 				6BF8A40A2AAF6A2200549893 /* Utils.swift */,
+				6B1E6CA22AD30CA200F13654 /* Constant.plist */,
 				6BBB0C672AC88CE8000C89FF /* UIColor+.swift */,
 				6BF8A3DC2AADD77B00549893 /* StudyInfo.json */,
 				6B8E10932ACBF8CC002FD93A /* Feedback.json */,
@@ -250,6 +267,7 @@
 			files = (
 				6BDB07F12AAB65030015B2DE /* LaunchScreen.storyboard in Resources */,
 				6BA575882AB20EF30002704E /* sfx_correct.mp3 in Resources */,
+				6B1E6CA32AD30CA200F13654 /* Constant.plist in Resources */,
 				6BA575892AB20EF30002704E /* sfx_wrong.mp3 in Resources */,
 				6BDB07EE2AAB65030015B2DE /* Assets.xcassets in Resources */,
 				6B8E10942ACBF8CD002FD93A /* Feedback.json in Resources */,
@@ -278,8 +296,10 @@
 				6BF8A40F2AAF6A6C00549893 /* UIViewControllerPreview.swift in Sources */,
 				6BF8A40D2AAF6A3C00549893 /* RTModel.swift in Sources */,
 				6BA575832AB1DFC80002704E /* ChoiceButton.swift in Sources */,
+				6B1E6C9E2AD30BFE00F13654 /* API.swift in Sources */,
 				6BBB0C3F2AC0083A000C89FF /* ImageFetcher.swift in Sources */,
 				6BBB0C662AC73D1E000C89FF /* FeedbackResultTableViewCell.swift in Sources */,
+				6B1E6CA02AD30C1000F13654 /* Network.swift in Sources */,
 				6BBB0C632AC72B0D000C89FF /* FeedbackView.swift in Sources */,
 				6BBB0C3D2ABF54EB000C89FF /* VideoPlayerView.swift in Sources */,
 				6BA5758B2AB356FC0002704E /* StudyVideoRecordView.swift in Sources */,

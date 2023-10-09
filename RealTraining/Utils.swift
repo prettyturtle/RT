@@ -25,6 +25,26 @@ func decodeJSONInBundle<T: Codable>(fileName: String) -> T? {
     return decodedData
 }
 
+// MARK: - Get Constant In Bundle
+func getConstantInBundle<T>(key: String) -> T {
+    guard let constantPlist = Bundle.main.path(
+        forResource: "Constant",
+        ofType: "plist"
+    ) else {
+        fatalError()
+    }
+    
+    guard let resource = NSDictionary(contentsOfFile: constantPlist) else {
+        fatalError()
+    }
+    
+    guard let constant = resource[key] as? T else {
+        fatalError()
+    }
+    
+    return constant
+}
+
 // MARK: - Haptic
 let haptic = UISelectionFeedbackGenerator()
 
