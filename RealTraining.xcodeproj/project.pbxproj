@@ -11,6 +11,7 @@
 		6B1E6C9E2AD30BFE00F13654 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1E6C9D2AD30BFD00F13654 /* API.swift */; };
 		6B1E6CA02AD30C1000F13654 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1E6C9F2AD30C1000F13654 /* Network.swift */; };
 		6B1E6CA32AD30CA200F13654 /* Constant.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6B1E6CA22AD30CA200F13654 /* Constant.plist */; };
+		6B1E6CA62AD44BF000F13654 /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 6B1E6CA52AD44BF000F13654 /* XMLCoder */; };
 		6B8E10922ACAA170002FD93A /* FeedbackGageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8E10912ACAA170002FD93A /* FeedbackGageView.swift */; };
 		6B8E10942ACBF8CD002FD93A /* Feedback.json in Resources */ = {isa = PBXBuildFile; fileRef = 6B8E10932ACBF8CC002FD93A /* Feedback.json */; };
 		6BA575812AB098510002704E /* StudySelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA575802AB098510002704E /* StudySelectView.swift */; };
@@ -81,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B1E6CA62AD44BF000F13654 /* XMLCoder in Frameworks */,
 				6BDB07FA2AAB65E90015B2DE /* Then in Frameworks */,
 				6BDB07FD2AAB65F40015B2DE /* SnapKit in Frameworks */,
 			);
@@ -218,6 +220,7 @@
 			packageProductDependencies = (
 				6BDB07F92AAB65E90015B2DE /* Then */,
 				6BDB07FC2AAB65F40015B2DE /* SnapKit */,
+				6B1E6CA52AD44BF000F13654 /* XMLCoder */,
 			);
 			productName = RealTraining;
 			productReference = 6BDB07E12AAB65010015B2DE /* RealTraining.app */;
@@ -250,6 +253,7 @@
 			packageReferences = (
 				6BDB07F82AAB65E90015B2DE /* XCRemoteSwiftPackageReference "Then" */,
 				6BDB07FB2AAB65F40015B2DE /* XCRemoteSwiftPackageReference "SnapKit" */,
+				6B1E6CA42AD44BF000F13654 /* XCRemoteSwiftPackageReference "XMLCoder" */,
 			);
 			productRefGroup = 6BDB07E22AAB65010015B2DE /* Products */;
 			projectDirPath = "";
@@ -528,6 +532,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6B1E6CA42AD44BF000F13654 /* XCRemoteSwiftPackageReference "XMLCoder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CoreOffice/XMLCoder.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.17.1;
+			};
+		};
 		6BDB07F82AAB65E90015B2DE /* XCRemoteSwiftPackageReference "Then" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/devxoul/Then";
@@ -547,6 +559,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6B1E6CA52AD44BF000F13654 /* XMLCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6B1E6CA42AD44BF000F13654 /* XCRemoteSwiftPackageReference "XMLCoder" */;
+			productName = XMLCoder;
+		};
 		6BDB07F92AAB65E90015B2DE /* Then */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6BDB07F82AAB65E90015B2DE /* XCRemoteSwiftPackageReference "Then" */;
