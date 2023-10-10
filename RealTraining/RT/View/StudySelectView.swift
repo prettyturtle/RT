@@ -327,6 +327,8 @@ final class StudySelectView: UIView {
         let choiceTexts = questionDic[questionTexts[currentQuestionStep]]!.shuffled()
         
         for i in 0..<choiceTexts.count {
+            if choiceTexts[i] == "" { continue }
+            
             let choiceButton = ChoiceButton(text: choiceTexts[i], index: i)
             
             choiceButton.addTarget(

@@ -44,6 +44,15 @@ final class RTViewController: UIViewController {
         $0.tintColor = .black
     }
     
+    private lazy var rightTestBarButton = UIBarButtonItem(
+        image: UIImage(systemName: "testtube.2"),
+        style: .plain,
+        target: self,
+        action: #selector(didTapTestButton)
+    ).then {
+        $0.tintColor = .black
+    }
+    
     private lazy var mainView = UIView()
     
     private var introView: IntroView?
@@ -92,6 +101,10 @@ final class RTViewController: UIViewController {
     }
     
     @objc func didTapSettingButton(_ sender: UIBarButtonItem) {
+        
+    }
+    
+    @objc func didTapTestButton(_ sender: UIBarButtonItem) {
         // MARK: - 피드백 화면 이동 테스트
         guard let feedback: RTFeedbackModel = decodeJSONInBundle(fileName: "Feedback") else {
             return
@@ -129,7 +142,8 @@ final class RTViewController: UIViewController {
     
     private func setupNavigationBar() {
         navigationItem.setLeftBarButton(leftBarButton, animated: true)
-        navigationItem.setRightBarButton(rightBarButton, animated: true)
+        navigationItem.setRightBarButtonItems([rightBarButton, rightTestBarButton], animated: true)
+//        navigationItem.setRightBarButton(rightBarButton, animated: true)
     }
     
     private func setupLayout() {
