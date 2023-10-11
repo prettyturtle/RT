@@ -12,6 +12,7 @@
 		6B1E6CA02AD30C1000F13654 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1E6C9F2AD30C1000F13654 /* Network.swift */; };
 		6B1E6CA32AD30CA200F13654 /* Constant.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6B1E6CA22AD30CA200F13654 /* Constant.plist */; };
 		6B1E6CA62AD44BF000F13654 /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 6B1E6CA52AD44BF000F13654 /* XMLCoder */; };
+		6B1E6CA82AD6FB2E00F13654 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1E6CA72AD6FB2E00F13654 /* SettingViewController.swift */; };
 		6B8E10922ACAA170002FD93A /* FeedbackGageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8E10912ACAA170002FD93A /* FeedbackGageView.swift */; };
 		6B8E10942ACBF8CD002FD93A /* Feedback.json in Resources */ = {isa = PBXBuildFile; fileRef = 6B8E10932ACBF8CC002FD93A /* Feedback.json */; };
 		6BA575812AB098510002704E /* StudySelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA575802AB098510002704E /* StudySelectView.swift */; };
@@ -47,6 +48,7 @@
 		6B1E6C9D2AD30BFD00F13654 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		6B1E6C9F2AD30C1000F13654 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		6B1E6CA22AD30CA200F13654 /* Constant.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Constant.plist; sourceTree = "<group>"; };
+		6B1E6CA72AD6FB2E00F13654 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		6B8E10912ACAA170002FD93A /* FeedbackGageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackGageView.swift; sourceTree = "<group>"; };
 		6B8E10932ACBF8CC002FD93A /* Feedback.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Feedback.json; sourceTree = "<group>"; };
 		6BA575802AB098510002704E /* StudySelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudySelectView.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 			children = (
 				6BA575822AB1DFC80002704E /* ChoiceButton.swift */,
 				6BBB0C602AC726D6000C89FF /* PopupViewController.swift */,
+				6B1E6CA72AD6FB2E00F13654 /* SettingViewController.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 				6BBB0C662AC73D1E000C89FF /* FeedbackResultTableViewCell.swift in Sources */,
 				6B1E6CA02AD30C1000F13654 /* Network.swift in Sources */,
 				6BBB0C632AC72B0D000C89FF /* FeedbackView.swift in Sources */,
+				6B1E6CA82AD6FB2E00F13654 /* SettingViewController.swift in Sources */,
 				6BBB0C3D2ABF54EB000C89FF /* VideoPlayerView.swift in Sources */,
 				6BA5758B2AB356FC0002704E /* StudyVideoRecordView.swift in Sources */,
 				6B8E10922ACAA170002FD93A /* FeedbackGageView.swift in Sources */,

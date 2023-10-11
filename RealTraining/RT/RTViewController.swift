@@ -101,7 +101,11 @@ final class RTViewController: UIViewController {
     }
     
     @objc func didTapSettingButton(_ sender: UIBarButtonItem) {
+        let settingVC = SettingViewController(settingTypes: [.fxVolume(85), .recordFx(2)])
         
+        settingVC.modalPresentationStyle = .overFullScreen
+        
+        present(settingVC, animated: false)
     }
     
     @objc func didTapTestButton(_ sender: UIBarButtonItem) {
