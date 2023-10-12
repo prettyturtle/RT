@@ -55,6 +55,7 @@ final class SettingViewController: UIViewController {
     
     private lazy var settingView = UIView().then {
         $0.backgroundColor = .white
+        $0.isHidden = true
     }
     
     private lazy var settingStackView = UIStackView().then {
@@ -75,6 +76,7 @@ final class SettingViewController: UIViewController {
         super.viewDidAppear(animated)
         
         settingView.transform = CGAffineTransform(translationX: 0, y: settingView.bounds.height)
+        settingView.isHidden = false
         
         UIView.animate(withDuration: 0.2) {
             self.settingView.transform = .identity
