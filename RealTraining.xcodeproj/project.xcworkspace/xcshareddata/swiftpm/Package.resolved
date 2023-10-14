@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "efcountinglabel",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/EFPrefix/EFCountingLabel.git",
+      "state" : {
+        "revision" : "d596b83316737a7e47e9feb83e648deb9a35a4da",
+        "version" : "5.1.5"
+      }
+    },
+    {
       "identity" : "snapkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SnapKit/SnapKit.git",

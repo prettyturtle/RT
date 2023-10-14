@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Then
+import EFCountingLabel
 
 final class FeedbackGageView: UIView {
     let level: Int
@@ -17,6 +18,7 @@ final class FeedbackGageView: UIView {
     
     private var levelGageBarView: UIView?
     private var scoreGageBarView: UIView?
+    private var scoreNumberLabel: EFCountingLabel?
     
     init(level: Int, levelPercent: Int, score: Int, maxScore: Int) {
         self.level = level
@@ -39,8 +41,15 @@ final class FeedbackGageView: UIView {
     }
     
     private func startGageUpAnimation() {
-        UIView.animate(withDuration: 0.3) {
-            self.levelGageBarView?.transform = .identity
+        levelGageBarView?.transform = .identity
+        
+        scoreNumberLabel?.setUpdateBlock { value, label in
+            label.text = "\(Int(value))"
+        }
+        scoreNumberLabel?.counter.timingFunction = EFTimingFunction.easeOut(easingRate: 3)
+        scoreNumberLabel?.countFrom(0, to: CGFloat(score), withDuration: 1.0)
+        
+        UIView.animate(withDuration: 1.0, delay: 0, options: .curveEaseOut) {
             self.scoreGageBarView?.transform = .identity
         } completion: { _ in
             print("HELLO World")
@@ -73,10 +82,14 @@ final class FeedbackGageView: UIView {
             $0.backgroundColor = gageColor
         }
         
-        let numberLabel = UILabel().then {
+        let numberLabel = EFCountingLabel().then {
             $0.text = "\(gageNumber)"
             $0.font = .systemFont(ofSize: 12, weight: .bold)
             $0.textColor = .white
+        }
+        
+        if title == "Score" {
+            scoreNumberLabel = numberLabel
         }
         
         [

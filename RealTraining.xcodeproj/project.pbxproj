@@ -13,6 +13,7 @@
 		6B1E6CA32AD30CA200F13654 /* Constant.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6B1E6CA22AD30CA200F13654 /* Constant.plist */; };
 		6B1E6CA62AD44BF000F13654 /* XMLCoder in Frameworks */ = {isa = PBXBuildFile; productRef = 6B1E6CA52AD44BF000F13654 /* XMLCoder */; };
 		6B1E6CA82AD6FB2E00F13654 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1E6CA72AD6FB2E00F13654 /* SettingViewController.swift */; };
+		6B1E6CAB2AD9B85100F13654 /* EFCountingLabel in Frameworks */ = {isa = PBXBuildFile; productRef = 6B1E6CAA2AD9B85100F13654 /* EFCountingLabel */; };
 		6B8E10922ACAA170002FD93A /* FeedbackGageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8E10912ACAA170002FD93A /* FeedbackGageView.swift */; };
 		6B8E10942ACBF8CD002FD93A /* Feedback.json in Resources */ = {isa = PBXBuildFile; fileRef = 6B8E10932ACBF8CC002FD93A /* Feedback.json */; };
 		6BA575812AB098510002704E /* StudySelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA575802AB098510002704E /* StudySelectView.swift */; };
@@ -85,6 +86,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B1E6CA62AD44BF000F13654 /* XMLCoder in Frameworks */,
+				6B1E6CAB2AD9B85100F13654 /* EFCountingLabel in Frameworks */,
 				6BDB07FA2AAB65E90015B2DE /* Then in Frameworks */,
 				6BDB07FD2AAB65F40015B2DE /* SnapKit in Frameworks */,
 			);
@@ -224,6 +226,7 @@
 				6BDB07F92AAB65E90015B2DE /* Then */,
 				6BDB07FC2AAB65F40015B2DE /* SnapKit */,
 				6B1E6CA52AD44BF000F13654 /* XMLCoder */,
+				6B1E6CAA2AD9B85100F13654 /* EFCountingLabel */,
 			);
 			productName = RealTraining;
 			productReference = 6BDB07E12AAB65010015B2DE /* RealTraining.app */;
@@ -257,6 +260,7 @@
 				6BDB07F82AAB65E90015B2DE /* XCRemoteSwiftPackageReference "Then" */,
 				6BDB07FB2AAB65F40015B2DE /* XCRemoteSwiftPackageReference "SnapKit" */,
 				6B1E6CA42AD44BF000F13654 /* XCRemoteSwiftPackageReference "XMLCoder" */,
+				6B1E6CA92AD9B85100F13654 /* XCRemoteSwiftPackageReference "EFCountingLabel" */,
 			);
 			productRefGroup = 6BDB07E22AAB65010015B2DE /* Products */;
 			projectDirPath = "";
@@ -544,6 +548,14 @@
 				minimumVersion = 0.17.1;
 			};
 		};
+		6B1E6CA92AD9B85100F13654 /* XCRemoteSwiftPackageReference "EFCountingLabel" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/EFPrefix/EFCountingLabel.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.5;
+			};
+		};
 		6BDB07F82AAB65E90015B2DE /* XCRemoteSwiftPackageReference "Then" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/devxoul/Then";
@@ -567,6 +579,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6B1E6CA42AD44BF000F13654 /* XCRemoteSwiftPackageReference "XMLCoder" */;
 			productName = XMLCoder;
+		};
+		6B1E6CAA2AD9B85100F13654 /* EFCountingLabel */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6B1E6CA92AD9B85100F13654 /* XCRemoteSwiftPackageReference "EFCountingLabel" */;
+			productName = EFCountingLabel;
 		};
 		6BDB07F92AAB65E90015B2DE /* Then */ = {
 			isa = XCSwiftPackageProductDependency;
