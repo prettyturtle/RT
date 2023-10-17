@@ -205,6 +205,7 @@ extension RTViewController: StudyThumbnailViewDelegate {
             videoURLString: studyInfos.rtQuizList.rtQuiz[currentStudyIdx].quizResource.movPath
         )
         
+        videoPlayerView?.delegate = self
         videoPlayerView?.setupPlayer()
         
         studySelectView = StudySelectView(
@@ -258,6 +259,12 @@ extension RTViewController: StudySelectViewDelegate {
             nextButton.isEnabled = true
             sv.removeFromSuperview()
             self?.studySelectView = nil
+        }
+    }
+    
+    func studySelectView(_ sv: StudySelectView, didFinishSelect: Bool) {
+        if videoPlayerView?.isFinishLoad == true {
+            sv.setupNextButton()
         }
     }
 }
@@ -330,6 +337,22 @@ extension RTViewController: StudyVideoRecordViewDelegate {
             srv.removeFromSuperview()
             self?.studyVideoRecordView = nil
             self?.videoPlayerView = nil
+        }
+    }
+}
+
+extension RTViewController: VideoPlayerViewDelegate {
+    func didFinishPlaying() {}
+    
+    func didFinishPrepareVideoPlayer(_ isFinish: Bool) {
+        if isFinish {
+            if let studySelectView = studySelectView {
+                if studySelectView.isFinishSelect {
+                    studySelectView.setupNextButton()
+                } else {
+                    videoPlayerView?.isFinishLoad = true
+                }
+            }
         }
     }
 }

@@ -335,4 +335,8 @@ extension StudyVideoRecordView: VideoPlayerViewDelegate {
         visualEffectView.frame = videoPlayerControlView.frame
         videoPlayerControlView.addSubview(visualEffectView)
     }
+    
+    func didFinishPrepareVideoPlayer(_ isFinish: Bool) {
+        print(isFinish, "12321")
+    }
 }

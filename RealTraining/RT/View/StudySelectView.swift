@@ -11,6 +11,7 @@ import Then
 
 protocol StudySelectViewDelegate: AnyObject {
     func studySelectView(_ sv: StudySelectView, didTapNextButton nextButton: UIButton)
+    func studySelectView(_ sv: StudySelectView, didFinishSelect: Bool)
 }
 
 final class StudySelectView: UIView {
@@ -28,6 +29,9 @@ final class StudySelectView: UIView {
     lazy var choiceTexts = Array(repeating: "", count: questionTexts.count)
     
     var questionBoxes = [UIView]()
+    
+    var isSetNextButton = false
+    var isFinishSelect = false
     
     private lazy var descriptionLabel = UILabel().then {
         $0.text = "한글 문장을 영어로 만들어보세요!"
@@ -178,7 +182,8 @@ final class StudySelectView: UIView {
     
     private func giveOX(_ step: Int) {
         if step == questionTexts.count {
-            setupNextButton()
+            isFinishSelect = true
+            delegate?.studySelectView(self, didFinishSelect: true)
             return
         }
         
@@ -214,7 +219,8 @@ final class StudySelectView: UIView {
         }
     }
     
-    private func setupNextButton() {
+    func setupNextButton() {
+        isSetNextButton = true
         addSubview(nextButton)
         
         nextButton.snp.makeConstraints {

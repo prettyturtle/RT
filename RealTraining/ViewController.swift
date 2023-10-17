@@ -34,7 +34,13 @@ final class ViewController: UIViewController {
     }
     
     @objc func didTapRTOpenButton(_ sender: UIButton) {
+        sender.setTitle("Loading", for: .normal)
+        
         API.getStudyInfo().request(method: "POST") { [weak self] result in
+            DispatchQueue.main.async {
+                sender.setTitle("SHOW", for: .normal)
+            }
+            
             guard let self = self else {
                 return
             }

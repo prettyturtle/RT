@@ -10,6 +10,7 @@ import AVFoundation
 
 protocol VideoPlayerViewDelegate: AnyObject {
     func didFinishPlaying()
+    func didFinishPrepareVideoPlayer(_ isFinish: Bool)
 }
 
 final class VideoPlayerView: UIView {
@@ -22,6 +23,10 @@ final class VideoPlayerView: UIView {
     var avPlayerItem: AVPlayerItem?
     
     private lazy var avPlayerLayer = AVPlayerLayer()
+    
+    var isFinishLoad = false
+    
+    var videoLoadObserver: NSKeyValueObservation?
     
     init(videoURLString: String) {
         self.videoURLString = videoURLString
@@ -43,6 +48,16 @@ final class VideoPlayerView: UIView {
         
         avPlayerItem = AVPlayerItem(url: videoURL)
         avPlayer = AVPlayer(playerItem: avPlayerItem)
+        
+        videoLoadObserver = avPlayerItem?.observe(\.isPlaybackLikelyToKeepUp, options: .new) { [weak self] _, _ in
+            guard let self = self else {
+                return
+            }
+            
+            if self.avPlayerItem?.isPlaybackLikelyToKeepUp == true {
+                self.delegate?.didFinishPrepareVideoPlayer(true)
+            }
+        }
         
         NotificationCenter.default
             .addObserver(self,
@@ -70,5 +85,9 @@ final class VideoPlayerView: UIView {
     
     @objc func didFinishPlaying() {
         delegate?.didFinishPlaying()
+    }
+    
+    deinit {
+        videoLoadObserver?.invalidate()
     }
 }
