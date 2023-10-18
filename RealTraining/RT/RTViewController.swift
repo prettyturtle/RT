@@ -159,7 +159,7 @@ final class RTViewController: UIViewController {
     }
     
     private func setupIntroViewLayout() {
-        introView = IntroView()
+        introView = IntroView(mode: .rt)
         introView?.delegate = self
         
         guard let introView = introView else {

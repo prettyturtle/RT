@@ -15,6 +15,17 @@ protocol IntroViewDelegate: AnyObject {
 
 final class IntroView: UIView {
     
+    enum Mode {
+        case rt
+        
+        var texts: (enTitle: String, koTitle: String, desc: String) {
+            switch self {
+            case .rt:
+                return ("Real Training", "리얼 트레이닝", "학습한 표현을 활용하여 영어문장을 만들어보고\n원어민의 발음과 억양을 주의하여 문장을 따라 말해보세요.")
+            }
+        }
+    }
+    
     weak var delegate: IntroViewDelegate?
     
     private lazy var topView = UIView().then { $0.isUserInteractionEnabled = false }
@@ -23,13 +34,13 @@ final class IntroView: UIView {
     private lazy var enTitleLabel = UILabel().then {
         $0.textColor = .lightGray
         $0.font = .systemFont(ofSize: 20, weight: .semibold)
-        $0.text = "Real Training"
+        $0.text = mode.texts.enTitle
     }
     
     private lazy var koTitleLabel = UILabel().then {
         $0.textColor = .black
         $0.font = .systemFont(ofSize: 36, weight: .heavy)
-        $0.text = "리얼 트레이닝"
+        $0.text = mode.texts.koTitle
     }
     
     private lazy var titleUnderlineView = UIView().then {
@@ -37,7 +48,7 @@ final class IntroView: UIView {
     }
     
     private lazy var descriptionLabel = UILabel().then {
-        $0.text = "학습한 표현을 활용하여 영어문장을 만들어보고\n원어민의 발음과 억양을 주의하여 문장을 따라 말해보세요."
+        $0.text = mode.texts.desc
         $0.numberOfLines = 0
         $0.textAlignment = .center
         $0.font = .systemFont(ofSize: 16, weight: .medium)
@@ -75,7 +86,10 @@ final class IntroView: UIView {
         )
     }
     
-    init() {
+    private let mode: Mode
+    
+    init(mode: Mode) {
+        self.mode = mode
         super.init(frame: .zero)
         backgroundColor = .white
         setupLayout()
