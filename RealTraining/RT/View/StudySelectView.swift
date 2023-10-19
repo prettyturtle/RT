@@ -29,6 +29,8 @@ final class StudySelectView: UIView {
     lazy var choiceTexts = Array(repeating: "", count: questionTexts.count)
     
     var questionBoxes = [UIView]()
+    var oxImageViews = [UIImageView]()
+    var choiceTextLabels = [UILabel]()
     
     var isSetNextButton = false
     var isFinishSelect = false
@@ -148,6 +150,8 @@ final class StudySelectView: UIView {
                 $0.textAlignment = .center
             }
             
+            choiceTextLabels.append(choiceTextLabel)
+            
             currentQuestionBox.addSubview(choiceTextLabel)
             
             choiceTextLabel.snp.makeConstraints {
@@ -182,6 +186,26 @@ final class StudySelectView: UIView {
     
     private func giveOX(_ step: Int) {
         if step == questionTexts.count {
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                for oxImageView in self.oxImageViews {
+                    oxImageView.removeFromSuperview()
+                }
+                
+                UIView.animate(withDuration: 0.2) {
+                    for i in 0..<self.questionTexts.count {
+                        let isCorrect = self.questionTexts[i] == self.choiceTexts[i]
+                        
+                        self.questionBoxes[i].backgroundColor = .init(hexCode: "0bc871")
+                        self.questionBoxes[i].layer.borderColor = UIColor(hexCode: "0bc871").cgColor
+                        
+                        if !isCorrect {
+                            self.choiceTextLabels[i].text = self.questionTexts[i]
+                        }
+                    }
+                }
+            }
+            
             isFinishSelect = true
             delegate?.studySelectView(self, didFinishSelect: true)
             return
@@ -190,6 +214,7 @@ final class StudySelectView: UIView {
         let isCorrect = questionTexts[step] == choiceTexts[step]
         
         let oxImageView = UIImageView()
+        oxImageViews.append(oxImageView)
         
         if isCorrect {
             oxImageView.image = UIImage(named: "icon_answer_o")
@@ -212,9 +237,15 @@ final class StudySelectView: UIView {
             playFX("sfx_wrong")
         }
         
-        UIView.animate(withDuration: 0.4) {
+        choiceTextLabels[step].textColor = .white
+        questionBoxes[step].backgroundColor = isCorrect ? .init(hexCode: "57b0f3") : .init(hexCode: "e12c1e")
+        questionBoxes[step].layer.borderColor = isCorrect ? UIColor(hexCode: "57b0f3").cgColor : UIColor(hexCode: "e12c1e").cgColor
+        questionBoxes[step].layer.shadowOpacity = 0
+        
+        UIView.animate(withDuration: 0.3) {
             oxImageView.transform = .identity
         } completion: { [weak self] _ in
+            
             self?.giveOX(step + 1)
         }
     }
