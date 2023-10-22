@@ -20,7 +20,7 @@ final class StudyThumbnailView: UIView {
     
     private lazy var thumbnailView = UIImageView().then {
         $0.backgroundColor = .secondarySystemBackground
-        $0.contentMode = .scaleAspectFit
+        $0.contentMode = !OrientationManager.landscapeSupported ? .scaleAspectFit : .scaleAspectFill
     }
     
     private lazy var questionLabel = UILabel().then {
@@ -31,13 +31,9 @@ final class StudyThumbnailView: UIView {
     
     private lazy var bubbleBorderView = UIView().then {
         $0.layer.cornerRadius = 20
-        $0.layer.borderColor = .init(
-            red: 251 / 255,
-            green: 184 / 255,
-            blue: 70 / 255,
-            alpha: 1
-        )
+        $0.layer.borderColor = UIColor(hexCode: "ffb820").cgColor
         $0.layer.borderWidth = 3
+        $0.backgroundColor = .white
     }
     
     private lazy var sentenceLabel = UILabel().then {
@@ -48,28 +44,33 @@ final class StudyThumbnailView: UIView {
     }
     
     private lazy var startButton = UIButton().then {
-        var titleConfig = AttributeContainer()
-        
-        titleConfig.foregroundColor = .white
-        titleConfig.font = .systemFont(ofSize: 20, weight: .heavy)
-        
-        var buttonConfig = UIButton.Configuration.filled()
-        
-        buttonConfig.attributedTitle = AttributedString(
-            "계속하기",
-            attributes: titleConfig
-        )
-        buttonConfig.image = UIImage(systemName: "arrow.forward.circle")
-        buttonConfig.imagePlacement = .trailing
-        buttonConfig.imagePadding = 8
-        buttonConfig.baseBackgroundColor = .init(
-            red: 239 / 255,
-            green: 64 / 255,
-            blue: 64 / 255,
-            alpha: 1
-        )
-        
-        $0.configuration = buttonConfig
+        if OrientationManager.landscapeSupported {
+            $0.setImage(UIImage(systemName: "arrow.forward.circle"), for: .normal)
+            $0.tintColor = .init(hexCode: "ffb820")
+        } else {
+            var titleConfig = AttributeContainer()
+            
+            titleConfig.foregroundColor = .white
+            titleConfig.font = .systemFont(ofSize: 20, weight: .heavy)
+            
+            var buttonConfig = UIButton.Configuration.filled()
+            
+            buttonConfig.attributedTitle = AttributedString(
+                "계속하기",
+                attributes: titleConfig
+            )
+            buttonConfig.image = UIImage(systemName: "arrow.forward.circle")
+            buttonConfig.imagePlacement = .trailing
+            buttonConfig.imagePadding = 8
+            buttonConfig.baseBackgroundColor = .init(
+                red: 239 / 255,
+                green: 64 / 255,
+                blue: 64 / 255,
+                alpha: 1
+            )
+            
+            $0.configuration = buttonConfig
+        }
         
         $0.addTarget(
             self,
@@ -118,30 +119,56 @@ final class StudyThumbnailView: UIView {
             addSubview($0)
         }
         
-        thumbnailView.snp.makeConstraints {
-            $0.leading.top.trailing.equalToSuperview()
-            $0.height.equalTo(thumbnailView.snp.width).multipliedBy(9.0 / 16.0)
-        }
-        
-        questionLabel.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(16)
-            $0.top.equalTo(thumbnailView.snp.bottom).offset(32)
-        }
-        
-        bubbleBorderView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(16)
-            $0.top.equalTo(questionLabel.snp.bottom).offset(32)
-            $0.bottom.equalTo(snp.centerY).multipliedBy(1.4)
-        }
-        
-        sentenceLabel.snp.makeConstraints {
-            $0.centerY.equalTo(bubbleBorderView.snp.centerY)
-            $0.leading.trailing.equalTo(bubbleBorderView).inset(16)
-        }
-        
-        startButton.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalToSuperview().inset(16)
-            $0.height.equalTo(50)
+        if OrientationManager.landscapeSupported {
+            thumbnailView.snp.makeConstraints {
+                $0.edges.equalToSuperview()
+            }
+            
+            bubbleBorderView.addSubview(sentenceLabel)
+            bubbleBorderView.addSubview(startButton)
+            
+            sentenceLabel.snp.makeConstraints {
+                $0.top.bottom.equalToSuperview().inset(16)
+                $0.leading.equalToSuperview().inset(48)
+            }
+            
+            startButton.snp.makeConstraints {
+                $0.centerY.equalTo(sentenceLabel)
+                $0.leading.equalTo(sentenceLabel.snp.trailing).offset(8)
+                $0.trailing.equalToSuperview().inset(48)
+                $0.size.equalTo(sentenceLabel.snp.height)
+            }
+            
+            bubbleBorderView.snp.makeConstraints {
+                $0.leading.equalTo(safeAreaLayoutGuide.snp.leading).inset(16)
+                $0.centerY.equalToSuperview()
+            }
+        } else {
+            thumbnailView.snp.makeConstraints {
+                $0.leading.top.trailing.equalToSuperview()
+                $0.height.equalTo(thumbnailView.snp.width).multipliedBy(9.0 / 16.0)
+            }
+            
+            questionLabel.snp.makeConstraints {
+                $0.leading.trailing.equalToSuperview().inset(16)
+                $0.top.equalTo(thumbnailView.snp.bottom).offset(32)
+            }
+            
+            bubbleBorderView.snp.makeConstraints {
+                $0.leading.trailing.equalToSuperview().inset(16)
+                $0.top.equalTo(questionLabel.snp.bottom).offset(32)
+                $0.bottom.equalTo(snp.centerY).multipliedBy(1.4)
+            }
+            
+            sentenceLabel.snp.makeConstraints {
+                $0.centerY.equalTo(bubbleBorderView.snp.centerY)
+                $0.leading.trailing.equalTo(bubbleBorderView).inset(16)
+            }
+            
+            startButton.snp.makeConstraints {
+                $0.leading.trailing.bottom.equalToSuperview().inset(16)
+                $0.height.equalTo(50)
+            }
         }
     }
 }

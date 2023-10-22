@@ -53,8 +53,6 @@ final class RTViewController: UIViewController {
         $0.tintColor = .black
     }
     
-    private lazy var mainView = UIView()
-    
     private var introView: IntroView?
     private var studyThumbnailView: StudyThumbnailView?
     private var studySelectView: StudySelectView?
@@ -131,10 +129,10 @@ final class RTViewController: UIViewController {
         )
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: feedbackGageView)
         
-        mainView.addSubview(feedbackView!)
+        view.addSubview(feedbackView!)
         
         feedbackView!.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
         
         feedbackView?.transform = CGAffineTransform(scaleX: 0, y: 0)
@@ -151,11 +149,11 @@ final class RTViewController: UIViewController {
     }
     
     private func setupLayout() {
-        view.addSubview(mainView)
-        
-        mainView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
-        }
+//        view.addSubview(mainView)
+//        
+//        mainView.snp.makeConstraints {
+//            $0.edges.equalTo(view.safeAreaLayoutGuide)
+//        }
     }
     
     private func setupIntroViewLayout() {
@@ -166,25 +164,46 @@ final class RTViewController: UIViewController {
             return
         }
         
-        mainView.addSubview(introView)
+        view.addSubview(introView)
         
         introView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
 }
 
 extension RTViewController: IntroViewDelegate {
+    func rotate() {
+        
+        OrientationManager.landscapeSupported = !OrientationManager.landscapeSupported
+        
+        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+        
+        if #available(iOS 16.0, *) {
+            windowScene?.requestGeometryUpdate(.iOS(
+                interfaceOrientations: OrientationManager.landscapeSupported ? .landscape : .portrait
+            ))
+            
+            self.setNeedsUpdateOfSupportedInterfaceOrientations()
+        }
+        
+    }
     func introView(_ iv: IntroView, didTapStartButton startButton: UIButton) {
         studyThumbnailView = StudyThumbnailView(studyInfo: studyInfos.rtQuizList.rtQuiz[currentStudyIdx])
         navigationItem.title = "Question \(currentStudyIdx + 1) of \(studyInfos.rtQuizList.rtQuiz.count)"
         
         studyThumbnailView?.delegate = self
         
-        mainView.addSubview(studyThumbnailView!)
+        view.addSubview(studyThumbnailView!)
         
-        studyThumbnailView!.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+        if OrientationManager.landscapeSupported {
+            studyThumbnailView!.snp.makeConstraints {
+                $0.edges.equalToSuperview()
+            }
+        } else {
+            studyThumbnailView!.snp.makeConstraints {
+                $0.edges.equalTo(view.safeAreaLayoutGuide)
+            }
         }
         
         studyThumbnailView?.transform = CGAffineTransform(scaleX: 0, y: 0)
@@ -215,21 +234,36 @@ extension RTViewController: StudyThumbnailViewDelegate {
         
         studySelectView?.delegate = self
         
-        mainView.addSubview(studySelectView!)
+        view.addSubview(studySelectView!)
         
-        studySelectView!.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+        if OrientationManager.landscapeSupported {
+            studySelectView!.snp.makeConstraints {
+                $0.edges.equalTo(view.safeAreaLayoutGuide)
+            }
+            
+            studySelectView?.transform = CGAffineTransform(scaleX: 0, y: 0)
+            
+            UIView.animate(withDuration: 0.3) {
+                self.studySelectView?.transform = .identity
+            } completion: { _ in
+                startButton.isEnabled = true
+            }
+        } else {
+            studySelectView!.snp.makeConstraints {
+                $0.edges.equalTo(view.safeAreaLayoutGuide)
+            }
+            
+            studySelectView?.transform = CGAffineTransform(translationX: 0, y: view.frame.height)
+            
+            UIView.animate(withDuration: 0.3) {
+                self.studySelectView?.transform = .identity
+            } completion: { [weak self] _ in
+                startButton.isEnabled = true
+                sv.removeFromSuperview()
+                self?.studyThumbnailView = nil
+            }
         }
         
-        studySelectView?.transform = CGAffineTransform(translationX: 0, y: view.frame.height)
-        
-        UIView.animate(withDuration: 0.3) {
-            self.studySelectView?.transform = .identity
-        } completion: { [weak self] _ in
-            startButton.isEnabled = true
-            sv.removeFromSuperview()
-            self?.studyThumbnailView = nil
-        }
     }
 }
 
@@ -245,10 +279,10 @@ extension RTViewController: StudySelectViewDelegate {
         
         studyVideoRecordView?.delegate = self
         
-        mainView.addSubview(studyVideoRecordView!)
+        view.addSubview(studyVideoRecordView!)
         
         studyVideoRecordView!.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
         
         studyVideoRecordView?.transform = CGAffineTransform(translationX: 0, y: -view.frame.height)
@@ -259,6 +293,11 @@ extension RTViewController: StudySelectViewDelegate {
             nextButton.isEnabled = true
             sv.removeFromSuperview()
             self?.studySelectView = nil
+            
+            if OrientationManager.landscapeSupported {
+                self?.studyThumbnailView?.removeFromSuperview()
+                self?.studyThumbnailView = nil
+            }
         }
     }
     
@@ -299,10 +338,10 @@ extension RTViewController: StudyVideoRecordViewDelegate {
             
             navigationItem.rightBarButtonItem = UIBarButtonItem(customView: feedbackGageView)
             
-            mainView.addSubview(feedbackView!)
+            view.addSubview(feedbackView!)
             
             feedbackView!.snp.makeConstraints {
-                $0.edges.equalToSuperview()
+                $0.edges.equalTo(view.safeAreaLayoutGuide)
             }
             
             feedbackView?.transform = CGAffineTransform(scaleX: 0, y: 0)
@@ -323,10 +362,10 @@ extension RTViewController: StudyVideoRecordViewDelegate {
         
         studyThumbnailView?.delegate = self
         
-        mainView.addSubview(studyThumbnailView!)
+        view.addSubview(studyThumbnailView!)
         
         studyThumbnailView!.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
         
         studyThumbnailView?.transform = CGAffineTransform(scaleX: 0, y: 0)

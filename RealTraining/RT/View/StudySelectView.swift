@@ -35,6 +35,8 @@ final class StudySelectView: UIView {
     var isSetNextButton = false
     var isFinishSelect = false
     
+    private lazy var container = UIView()
+    
     private lazy var descriptionLabel = UILabel().then {
         $0.text = "한글 문장을 영어로 만들어보세요!"
         $0.font = .systemFont(ofSize: 20, weight: .heavy)
@@ -252,11 +254,24 @@ final class StudySelectView: UIView {
     
     func setupNextButton() {
         isSetNextButton = true
-        addSubview(nextButton)
         
-        nextButton.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalToSuperview().inset(16)
-            $0.height.equalTo(50)
+        if OrientationManager.landscapeSupported {
+            container.addSubview(nextButton)
+            
+            nextButton.snp.makeConstraints {
+                $0.centerX.equalToSuperview()
+                $0.height.equalTo(50)
+                $0.width.equalToSuperview().dividedBy(2.0)
+                $0.bottom.equalToSuperview().inset(16)
+                $0.top.equalTo(questionBackgroundView.snp.bottom).offset(16)
+            }
+        } else {
+            addSubview(nextButton)
+            
+            nextButton.snp.makeConstraints {
+                $0.leading.trailing.bottom.equalToSuperview().inset(16)
+                $0.height.equalTo(50)
+            }
         }
     }
     
@@ -374,9 +389,18 @@ final class StudySelectView: UIView {
                 for: .touchUpInside
             )
             
-            choiceButton.snp.makeConstraints {
-                $0.width.equalTo(frame.width - 32)
-                $0.height.equalTo(64)
+            if OrientationManager.landscapeSupported {
+                let buttonWidth = choiceTexts.count > 3 ? (frame.width - 32) / CGFloat(choiceTexts.count) : (frame.width - 32) / 3
+                
+                choiceButton.snp.makeConstraints {
+                    $0.width.equalTo(buttonWidth)
+                    $0.height.equalTo(53)
+                }
+            } else {
+                choiceButton.snp.makeConstraints {
+                    $0.width.equalTo(frame.width - 32)
+                    $0.height.equalTo(64)
+                }
             }
             
             choiceButtonStackView.addArrangedSubview(choiceButton)
@@ -384,41 +408,98 @@ final class StudySelectView: UIView {
     }
     
     private func setupLayout() {
-        [
-            descriptionLabel,
-            questionBackgroundView,
-            questionBoxTotalStackView,
-            questionMeanLabel,
-            choiceButtonStackView
-        ].forEach {
-            addSubview($0)
-        }
-        
-        descriptionLabel.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(16)
-            $0.top.equalToSuperview().inset(40)
-        }
-        
-        questionBackgroundView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(descriptionLabel.snp.bottom).offset(40)
-            $0.height.equalTo(frame.height / 3)
-        }
-        
-        questionBoxTotalStackView.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.greaterThanOrEqualTo(questionBackgroundView.snp.top)
-            $0.bottom.equalTo(questionBackgroundView.snp.centerY).offset(-16)
-        }
-        
-        questionMeanLabel.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(16)
-            $0.top.equalTo(questionBackgroundView.snp.centerY).offset(16)
-        }
-        
-        choiceButtonStackView.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(questionBackgroundView.snp.bottom).offset(40)
+        if OrientationManager.landscapeSupported {
+            backgroundColor = .clear
+            choiceButtonStackView.axis = .horizontal
+            questionBackgroundView.layer.cornerRadius = 12
+            
+            container.layer.borderWidth = 4.0
+            container.layer.borderColor = UIColor(hexCode: "ffb820").cgColor
+            container.clipsToBounds = true
+            container.layer.cornerRadius = 12
+            container.backgroundColor = .white
+            
+            addSubview(container)
+            
+            container.snp.makeConstraints {
+                $0.edges.equalToSuperview().inset(16)
+            }
+            
+            [
+                descriptionLabel,
+                questionBackgroundView,
+                choiceButtonStackView
+            ].forEach {
+                container.addSubview($0)
+            }
+            
+            descriptionLabel.snp.makeConstraints {
+                $0.leading.trailing.equalToSuperview().inset(16)
+                $0.top.equalToSuperview().inset(16)
+            }
+            
+            questionBackgroundView.snp.makeConstraints {
+                $0.leading.trailing.equalToSuperview().inset(16)
+                $0.top.equalTo(descriptionLabel.snp.bottom).offset(16)
+            }
+            
+            questionBackgroundView.addSubview(questionBoxTotalStackView)
+            questionBackgroundView.addSubview(questionMeanLabel)
+            
+            questionBoxTotalStackView.snp.makeConstraints {
+                $0.centerX.equalToSuperview()
+                $0.top.greaterThanOrEqualToSuperview().inset(16)
+                $0.bottom.equalTo(questionBackgroundView.snp.centerY).offset(-8)
+            }
+            
+            questionMeanLabel.snp.makeConstraints {
+                $0.leading.trailing.equalToSuperview().inset(16)
+                $0.top.equalTo(questionBackgroundView.snp.centerY).offset(8)
+                $0.bottom.greaterThanOrEqualToSuperview().inset(16)
+            }
+            
+            choiceButtonStackView.snp.makeConstraints {
+                $0.centerX.equalToSuperview()
+                $0.top.equalTo(questionBackgroundView.snp.bottom).offset(16)
+                $0.bottom.equalToSuperview().inset(16)
+            }
+        } else {
+            [
+                descriptionLabel,
+                questionBackgroundView,
+                questionBoxTotalStackView,
+                questionMeanLabel,
+                choiceButtonStackView
+            ].forEach {
+                addSubview($0)
+            }
+            
+            descriptionLabel.snp.makeConstraints {
+                $0.leading.trailing.equalToSuperview().inset(16)
+                $0.top.equalToSuperview().inset(40)
+            }
+            
+            questionBackgroundView.snp.makeConstraints {
+                $0.leading.trailing.equalToSuperview()
+                $0.top.equalTo(descriptionLabel.snp.bottom).offset(40)
+                $0.height.equalTo(frame.height / 3)
+            }
+            
+            questionBoxTotalStackView.snp.makeConstraints {
+                $0.centerX.equalToSuperview()
+                $0.top.greaterThanOrEqualTo(questionBackgroundView.snp.top)
+                $0.bottom.equalTo(questionBackgroundView.snp.centerY).offset(-16)
+            }
+            
+            questionMeanLabel.snp.makeConstraints {
+                $0.leading.trailing.equalToSuperview().inset(16)
+                $0.top.equalTo(questionBackgroundView.snp.centerY).offset(16)
+            }
+            
+            choiceButtonStackView.snp.makeConstraints {
+                $0.centerX.equalToSuperview()
+                $0.top.equalTo(questionBackgroundView.snp.bottom).offset(40)
+            }
         }
     }
 }

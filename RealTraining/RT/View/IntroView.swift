@@ -11,6 +11,7 @@ import Then
 
 protocol IntroViewDelegate: AnyObject {
     func introView(_ iv: IntroView, didTapStartButton startButton: UIButton)
+    func rotate()
 }
 
 final class IntroView: UIView {
@@ -86,6 +87,19 @@ final class IntroView: UIView {
         )
     }
     
+    private lazy var rotateButton = UIButton().then {
+        $0.setImage(
+            UIImage(systemName: "arrow.triangle.2.circlepath.circle"),
+            for: .normal
+        )
+        $0.tintColor = .lightGray
+        $0.addTarget(
+            self,
+            action: #selector(didTapRotateButton),
+            for: .touchUpInside
+        )
+    }
+    
     private let mode: Mode
     
     init(mode: Mode) {
@@ -104,64 +118,150 @@ final class IntroView: UIView {
         delegate?.introView(self, didTapStartButton: sender)
     }
     
+    @objc func didTapRotateButton(_ sender: UIButton) {
+        delegate?.rotate()
+        
+        setupLayout()
+    }
+    
+    override func updateConstraints() {
+        print("HELLO1")
+        super.updateConstraints()
+        print("HELLO2")
+    }   //
+    
     private func setupLayout() {
         [
             topView,
-            bottomView
-        ].forEach {
-            addSubview($0)
-        }
-        
-        topView.snp.makeConstraints {
-            $0.leading.top.trailing.equalToSuperview()
-            $0.height.equalToSuperview().multipliedBy(0.7)
-        }
-        
-        bottomView.snp.makeConstraints {
-            $0.leading.bottom.trailing.equalToSuperview()
-            $0.height.equalToSuperview().multipliedBy(0.3)
-        }
-        
-        [
+            bottomView,
             enTitleLabel,
             koTitleLabel,
             titleUnderlineView,
-            descriptionLabel
+            descriptionLabel,
+            startButton,
+            rotateButton
         ].forEach {
-            topView.addSubview($0)
+            $0.snp.removeConstraints()
+            $0.removeFromSuperview()
         }
         
-        enTitleLabel.snp.makeConstraints {
-            $0.bottom.equalTo(koTitleLabel.snp.top).offset(-4)
-            $0.leading.equalTo(koTitleLabel.snp.leading)
-        }
-        
-        koTitleLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().multipliedBy(0.64)
-        }
-        
-        titleUnderlineView.snp.makeConstraints {
-            $0.top.equalTo(koTitleLabel.snp.bottom).offset(4)
-            $0.leading.trailing.equalTo(koTitleLabel).inset(-4)
-            $0.height.equalTo(2)
-        }
-        
-        descriptionLabel.snp.makeConstraints {
-            $0.top.equalTo(titleUnderlineView.snp.bottom).offset(56)
-            $0.leading.trailing.equalToSuperview().inset(16)
-        }
-        
-        [
-            startButton
-        ].forEach {
-            addSubview($0)
-        }
-        
-        startButton.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(16)
-            $0.centerY.equalTo(bottomView.snp.top)
-            $0.height.equalTo(50)
+        if OrientationManager.landscapeSupported {
+            [
+                descriptionLabel,
+                enTitleLabel,
+                koTitleLabel,
+                titleUnderlineView,
+                startButton,
+                rotateButton,
+                rotateButton
+            ].forEach {
+                addSubview($0)
+            }
+            
+            enTitleLabel.snp.makeConstraints {
+                $0.top.equalToSuperview().inset(16)
+                $0.leading.equalTo(koTitleLabel.snp.leading)
+            }
+            
+            koTitleLabel.snp.makeConstraints {
+                $0.centerX.equalToSuperview()
+                $0.top.equalTo(enTitleLabel.snp.bottom).offset(4)
+            }
+            
+            titleUnderlineView.snp.makeConstraints {
+                $0.leading.trailing.equalTo(koTitleLabel).inset(-4)
+                $0.height.equalTo(2)
+                $0.top.equalTo(koTitleLabel.snp.bottom)
+            }
+            
+            descriptionLabel.snp.makeConstraints {
+                $0.centerY.equalToSuperview()
+                $0.leading.trailing.equalToSuperview().inset(16)
+            }
+            
+            startButton.snp.makeConstraints {
+                $0.width.equalToSuperview().dividedBy(2.0)
+                $0.bottom.equalToSuperview().inset(16)
+                $0.height.equalTo(50)
+                $0.centerX.equalToSuperview()
+            }
+            
+            rotateButton.snp.makeConstraints {
+                $0.size.equalTo(50)
+                $0.trailing.bottom.equalToSuperview().inset(16)
+            }
+            rotateButton.imageView?.snp.makeConstraints {
+                $0.size.equalTo(50)
+            }
+            
+        } else {
+            [
+                topView,
+                bottomView
+            ].forEach {
+                addSubview($0)
+            }
+            
+            topView.snp.makeConstraints {
+                $0.leading.top.trailing.equalToSuperview()
+                $0.height.equalToSuperview().multipliedBy(0.7)
+            }
+            
+            bottomView.snp.makeConstraints {
+                $0.leading.bottom.trailing.equalToSuperview()
+                $0.height.equalToSuperview().multipliedBy(0.3)
+            }
+            
+            [
+                enTitleLabel,
+                koTitleLabel,
+                titleUnderlineView,
+                descriptionLabel
+            ].forEach {
+                topView.addSubview($0)
+            }
+            
+            enTitleLabel.snp.makeConstraints {
+                $0.bottom.equalTo(koTitleLabel.snp.top).offset(-4)
+                $0.leading.equalTo(koTitleLabel.snp.leading)
+            }
+            
+            koTitleLabel.snp.makeConstraints {
+                $0.centerX.equalToSuperview()
+                $0.centerY.equalToSuperview().multipliedBy(0.64)
+            }
+            
+            titleUnderlineView.snp.makeConstraints {
+                $0.top.equalTo(koTitleLabel.snp.bottom).offset(4)
+                $0.leading.trailing.equalTo(koTitleLabel).inset(-4)
+                $0.height.equalTo(2)
+            }
+            
+            descriptionLabel.snp.makeConstraints {
+                $0.top.equalTo(titleUnderlineView.snp.bottom).offset(56)
+                $0.leading.trailing.equalToSuperview().inset(16)
+            }
+            
+            [
+                startButton,
+                rotateButton
+            ].forEach {
+                addSubview($0)
+            }
+            
+            startButton.snp.makeConstraints {
+                $0.leading.trailing.equalToSuperview().inset(16)
+                $0.centerY.equalTo(bottomView.snp.top)
+                $0.height.equalTo(50)
+            }
+            
+            rotateButton.snp.makeConstraints {
+                $0.size.equalTo(50)
+                $0.trailing.bottom.equalToSuperview().inset(16)
+            }
+            rotateButton.imageView?.snp.makeConstraints {
+                $0.size.equalTo(50)
+            }
         }
     }
 }
