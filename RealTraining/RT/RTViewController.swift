@@ -145,6 +145,9 @@ final class RTViewController: UIViewController {
     private func setupNavigationBar() {
         navigationItem.setLeftBarButton(leftBarButton, animated: true)
         navigationItem.setRightBarButtonItems([rightBarButton, rightTestBarButton], animated: true)
+        
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14, weight: .medium)]
+
 //        navigationItem.setRightBarButton(rightBarButton, animated: true)
     }
     
