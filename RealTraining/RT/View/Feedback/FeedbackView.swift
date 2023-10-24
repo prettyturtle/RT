@@ -9,9 +9,15 @@ import UIKit
 import SnapKit
 import Then
 
+protocol FeedbackViewDelegate: AnyObject {
+    func feedbackView(_ fv: FeedbackView, didTapNextButton: UIButton)
+}
+
 final class FeedbackView: UIView {
     let studyInfos: [RtQuiz]
     let feedback: RTFeedbackModel
+    
+    weak var delegate: FeedbackViewDelegate?
     
     private lazy var titleLabel = UILabel().then {
         $0.text = "학습한 문장을 확인해 보세요."
@@ -73,6 +79,11 @@ final class FeedbackView: UIView {
         buttonConfig.baseForegroundColor = .white
         
         $0.configuration = buttonConfig
+        $0.addTarget(
+            self,
+            action: #selector(didTapNextButton),
+            for: .touchUpInside
+        )
     }
     
     init(studyInfos: [RtQuiz], feedback: RTFeedbackModel, frame: CGRect) {
@@ -87,6 +98,10 @@ final class FeedbackView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func didTapNextButton(_ sender: UIButton) {
+        delegate?.feedbackView(self, didTapNextButton: sender)
     }
     
     private func setupLayout() {

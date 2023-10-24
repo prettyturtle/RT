@@ -58,6 +58,7 @@ final class RTViewController: UIViewController {
     private var studySelectView: StudySelectView?
     private var studyVideoRecordView: StudyVideoRecordView?
     private var feedbackView: FeedbackView?
+    private var summaryView: SummaryView?
     
     private var videoPlayerView: VideoPlayerView?
     
@@ -117,6 +118,8 @@ final class RTViewController: UIViewController {
             feedback: feedback,
             frame: view.safeAreaLayoutGuide.layoutFrame
         )
+        
+        feedbackView?.delegate = self
         
         navigationItem.title = ""
         navigationItem.rightBarButtonItem = nil
@@ -329,6 +332,8 @@ extension RTViewController: StudyVideoRecordViewDelegate {
                 frame: view.safeAreaLayoutGuide.layoutFrame
             )
             
+            feedbackView?.delegate = self
+            
             navigationItem.title = ""
             navigationItem.rightBarButtonItem = nil
             
@@ -379,6 +384,33 @@ extension RTViewController: StudyVideoRecordViewDelegate {
             srv.removeFromSuperview()
             self?.studyVideoRecordView = nil
             self?.videoPlayerView = nil
+        }
+    }
+}
+
+extension RTViewController: FeedbackViewDelegate {
+    func feedbackView(_ fv: FeedbackView, didTapNextButton: UIButton) {
+        summaryView = SummaryView(
+            temp: 0,
+            frame: view.safeAreaLayoutGuide.layoutFrame
+        )
+        
+        navigationItem.title = "실전 리얼 트레이닝"
+        navigationItem.rightBarButtonItem = rightBarButton
+        
+        view.addSubview(summaryView!)
+        
+        summaryView!.snp.makeConstraints {
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        summaryView?.transform = CGAffineTransform(scaleX: 0, y: 0)
+        
+        UIView.animate(withDuration: 0.3) {
+            self.summaryView?.transform = .identity
+        } completion: { _ in
+            self.feedbackView?.removeFromSuperview()
+            self.feedbackView = nil
         }
     }
 }
