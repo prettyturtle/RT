@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6B192AB72AE8149B0021EA82 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B192AB62AE8149B0021EA82 /* SummaryView.swift */; };
+		6B192AB92AE95CF30021EA82 /* CircularProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B192AB82AE95CF30021EA82 /* CircularProgressBar.swift */; };
 		6B1E6C992ACC11F700F13654 /* Feedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1E6C982ACC11F700F13654 /* Feedback.swift */; };
 		6B1E6C9E2AD30BFE00F13654 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1E6C9D2AD30BFD00F13654 /* API.swift */; };
 		6B1E6CA02AD30C1000F13654 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B1E6C9F2AD30C1000F13654 /* Network.swift */; };
@@ -47,6 +48,7 @@
 
 /* Begin PBXFileReference section */
 		6B192AB62AE8149B0021EA82 /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
+		6B192AB82AE95CF30021EA82 /* CircularProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressBar.swift; sourceTree = "<group>"; };
 		6B1E6C982ACC11F700F13654 /* Feedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feedback.swift; sourceTree = "<group>"; };
 		6B1E6C9D2AD30BFD00F13654 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		6B1E6C9F2AD30C1000F13654 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 				6BA575822AB1DFC80002704E /* ChoiceButton.swift */,
 				6BBB0C602AC726D6000C89FF /* PopupViewController.swift */,
 				6B1E6CA72AD6FB2E00F13654 /* SettingViewController.swift */,
+				6B192AB82AE95CF30021EA82 /* CircularProgressBar.swift */,
 			);
 			path = Component;
 			sourceTree = "<group>";
@@ -301,6 +304,7 @@
 				6BDB07E52AAB65010015B2DE /* AppDelegate.swift in Sources */,
 				6B1E6C992ACC11F700F13654 /* Feedback.swift in Sources */,
 				6BDB08012AAB817D0015B2DE /* IntroView.swift in Sources */,
+				6B192AB92AE95CF30021EA82 /* CircularProgressBar.swift in Sources */,
 				6BF8A40B2AAF6A2200549893 /* Utils.swift in Sources */,
 				6B192AB72AE8149B0021EA82 /* SummaryView.swift in Sources */,
 				6BA575812AB098510002704E /* StudySelectView.swift in Sources */,

@@ -21,6 +21,11 @@ final class SummaryView: UIView {
         $0.font = .systemFont(ofSize: 16, weight: .medium)
     }
     
+    private lazy var circularProgressBar = CircularProgressBar().then {
+        $0.lineWidth = 20
+        $0.centerView = UILabel().then { $0.text = "HELLO";$0.textColor = .red; }
+    }
+    
     init(temp: Int, frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -30,11 +35,16 @@ final class SummaryView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setCircularProgress(value: Double) {
+        circularProgressBar.value = value
+    }
+    
     private func setupView() {
         backgroundColor = .white
         
         [
-            capsuleTextLabel
+            capsuleTextLabel,
+            circularProgressBar
         ].forEach {
             addSubview($0)
         }
@@ -44,6 +54,12 @@ final class SummaryView: UIView {
             $0.width.equalTo(100)
             $0.height.equalTo(28)
         }
+        
+        circularProgressBar.snp.makeConstraints {
+            $0.top.equalTo(capsuleTextLabel.snp.bottom).offset(16)
+            $0.width.equalToSuperview().dividedBy(1.5)
+            $0.height.equalTo(circularProgressBar.snp.width)
+            $0.centerX.equalToSuperview()
+        }
     }
 }
-

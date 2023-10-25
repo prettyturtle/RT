@@ -411,6 +411,7 @@ extension RTViewController: FeedbackViewDelegate {
         } completion: { _ in
             self.feedbackView?.removeFromSuperview()
             self.feedbackView = nil
+            self.summaryView?.setCircularProgress(value: 0.8)
         }
     }
 }
